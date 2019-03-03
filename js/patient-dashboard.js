@@ -16,6 +16,7 @@ $(function() {
     populate_assignedDoctors();
     populate_medications();
     populate_appointments();
+    populate_assigned_medications();
 });
 
 // Function to return information of current user profile
@@ -183,4 +184,173 @@ function populate_appointments() {
                                     '</div>'+
                                 '</div>')
     }
+}
+
+
+
+// *************** Patient Profile Page ****************
+
+
+$(document).on("click", "#update-med", edit_medications_form);
+$(document).on("click", "#add-med", medication_form);
+$(document).on("click", "#new-med-button", add_medication);
+$(document).on("click", "#cancel-update", cancel_update);
+$(document).on("click", "#delete-med", delete_medication);
+$(document).on("click", "#cancel-new-med", cancel_new_medication);
+
+function edit_medications_form() {
+    const button = $(this)[0].children[0]
+    const textDiv = $($($(this).parent()).parent()[0]).children()[1];
+    if ($(button).text() == "Update Medication") {
+        const original_text = $(textDiv).text();
+        $(textDiv).empty();
+        $(textDiv).append(
+            '<textarea rows="4" cols= "75" type="text" >' +
+            original_text +
+            '</textarea>'
+        );
+        $(button).text("Save and Submit")
+        const next_button = $($(button).parent()[0]).next()[0]
+        $(next_button).removeAttr("delete-med")
+        $(next_button).attr("id", "cancel-update")
+        $($(next_button).children()[0]).text("Cancel")
+    } else if ($(button).text() == "Save and Submit") {
+        const new_text = $($(textDiv).children()[0]).val();
+        const med_container = $($(textDiv).parent()[0]).prev()[0]
+        const med_name = $($(med_container).children()[0]).text();
+        for (let i = 0; i < user.medications.length; i++) {
+            if (user.medications[i]["name"] == med_name) {
+                user.medications[i]["description"] = new_text;
+            }
+        }
+        $(textDiv).empty();
+        $(textDiv).append(new_text);
+        $(button).text("Update Medication")
+        const next_button = $($(button).parent()).next()[0]
+        $(next_button).removeAttr("cancel-update")
+        $(next_button).attr("id", "delete-med")
+        $($(next_button).children()[0]).text("Delete Medication")
+    }
+}
+
+function cancel_update() {
+    console.log(this)
+    const container_to_update = $($(this).parent()[0]).parent()[0];
+    const med_list = user.getMedications();
+    const med_name = $($($(container_to_update).prev()[0]).children()[0]).text();
+    for (let i = 0; i < med_list.length; i++) {
+        if (med_list[i]["name"] == med_name) {
+            const text = med_list[i]["description"]
+            $(container_to_update).empty()
+            $(container_to_update).append(
+                '<span class="med-edit">'+
+                    '<div id="update-med">' + 
+                        '<button type="button" class="btn btn-outline-light">Update Medication</button>' +
+                    '</div>' +
+                    '<div id="delete-med">' + 
+                        '<button type="button" class="btn btn-outline-light">Delete Medication</button>' +
+                    '</div>' +
+                '</span>'
+                );
+            $(container_to_update).append('<div class="med-notes">'+
+                text +
+                '</div>')
+        }
+    }
+}
+
+function medication_form() {
+    if ($(this).text() == "Add Medication") {
+        const med_add = $(this).parent()
+        $(med_add).empty()
+        $(med_add).append(
+        '<div id="new-medication-form">' +
+            '<span class="med-input">' +
+                '<div>Medication name: </div>' +
+                '<textarea rows="1" type="text"></textarea>' +
+            '</span>' +
+            '<span class="med-input">' +
+                '<div>Dosage: </div>' +
+                '<textarea rows="1" type="text"></textarea>' +
+            '</span>' +
+            '<div>Description: </div>' +
+            '<textarea rows="4" cols= "75" type="text" ></textarea>' +
+        '</div>' +
+        '<button type="button" class="btn btn-outline-light" id="new-med-button">Save and Submit</button>' +
+        '<button type="button" class="btn btn-outline-light" id="cancel-new-med">Cancel</button>'
+        );
+    }
+}
+
+function add_medication(){
+    const med_form = $(this).prev()[0].children;
+    user.assignMedication({
+        name: $($(med_form)[0].children[1]).val(),
+        dosage: $($(med_form)[1].children[1]).val(),
+        description: $($(med_form)[3]).val()
+    })
+    populate_assigned_medications();
+}
+
+function delete_medication() {
+    const med_container = $($($(this).parent()[0]).parent()[0]).prev()[0];
+    const med_name = $($(med_container).children()[0]).text()
+    for (let i = 0; i < user.medications.length; i++) {
+        console.log(med_name)
+        console.log(user.medications[i]["name"])
+        if (med_name == user.medications[i]["name"]) {
+            user.medications.splice(i, 1)
+            populate_assigned_medications();
+        }
+    }
+}
+
+function cancel_new_medication() {
+    const med_add = $($(this).parent())[0];
+    $(med_add).empty()
+    $(med_add).append( 
+        '<button type="button" class="btn btn-outline-light" id="add-med">Add Medication</button>' 
+        );
+}
+
+
+function populate_assigned_medications() {
+    $('#assigned-med-list').empty();
+    const medicationList = user.getMedications();
+    
+    for (let i = 0; i < medicationList.length; i++) {
+        $('#assigned-med-list').append(
+            '<div class="med-list-item">'+
+                '<p>'+
+                    '<span class="med-title">'+
+                        medicationList[i]['name']+
+                    '</span>'+
+                    '<img src="./resources/images/icons/expandplus-icon.png" class="expand" data-toggle="collapse" href="#collapseExample' + i + 
+                            '" role="button" aria-expanded="false" aria-controls="collapseExample"/>' +
+                    
+                    '<div class="collapse" id="collapseExample' + i + '">' +
+                        '<span class="med-edit">'+
+                            '<div id="update-med">' + 
+                                '<button type="button" class="btn btn-outline-light">Update Medication</button>' +
+                            '</div>' +
+                            '<div id="delete-med">' + 
+                                '<button type="button" class="btn btn-outline-light">Delete Medication</button>' +
+                            '</div>' +
+                        '</span>'+
+                        '<div class="med-notes">'+
+                            medicationList[i]['description']+
+                        '</div>'+
+                    '</div>' +
+                    
+                '</p>'+
+            '</div>' +
+            '<hr >'
+                );
+    }
+    $('#assigned-med-list').append(
+        '<div class="med-add">'+
+            '<button type="button" class="btn btn-outline-light" id="add-med">Add Medication</button>' +
+        '</div>' 
+        
+    );
 }
