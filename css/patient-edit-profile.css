@@ -1,0 +1,79 @@
+@font-face {
+    font-family: domine;
+    src: url(../resources/fonts/Domine/Domine-Regular.ttf);
+}
+@font-face {
+    font-family: domine-bold;
+    src: url(../resources/fonts/Domine/Domine-Bold.ttf);
+}
+@font-face {
+    font-family: roboto-light;
+    src: url(../resources/fonts/Roboto/roboto-light.ttf);
+}
+@font-face {
+    font-family: roboto-bold;
+    src: url(../resources/fonts/Roboto/roboto-bold.ttf);
+}
+
+html, body {
+    height: 100%;
+}
+
+#background {
+    width: 100%; 
+    height: 100%; 
+    position: fixed; 
+    left: 0px; 
+    top: 0px; 
+    filter: brightness(50%);
+    z-index: -1; /* Ensure div tag stays behind content; -999 might work, too. */
+}
+
+.stretch {
+    width:100%;
+    height:100%;
+}
+
+.navbar {
+    position:fixed;
+    width:100%;
+    background: none;
+}
+
+.navbar-icon {
+    transition: transform .2s; /* Animation */
+}
+
+.navbar-icon:hover {
+    transform: scale(1.3); 
+}
+
+.inline {
+    display: inline;
+}
+
+.nav-icon {
+    list-style-type: none;
+    margin-bottom:0;
+}
+
+.hover-pointer:hover{
+    cursor:pointer;
+}
+
+.edit-profile{
+    padding: 70px;
+}
+
+.profile-picture {
+	height:150px;
+	width:150px;
+    border-radius: 50%;
+    border: 2px solid white;
+    margin-left:48px;
+    margin-top:15px;
+}
+
+h4, label{
+    color: white;
+}
