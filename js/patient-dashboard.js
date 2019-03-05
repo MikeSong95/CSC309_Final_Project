@@ -325,6 +325,9 @@ function populate_assigned_medications() {
                     '<span class="med-title">'+
                         medicationList[i]['name']+
                     '</span>'+
+                    '<span>' +
+                        " (" + medicationList[i]['dosage'] + ")" +
+                    '</span>' + 
                     '<img src="./resources/images/icons/expandplus-icon.png" class="expand" data-toggle="collapse" href="#collapseExample' + i + 
                             '" role="button" aria-expanded="false" aria-controls="collapseExample"/>' +
                     
