@@ -19,6 +19,15 @@ $(function() {
     populate_assigned_medications();
 });
 
+document.addEventListener("click", function() {
+    $('.card-deck').css("z-index", "1");
+});
+
+function bringToFront() {
+        // Set everything else to back
+        $('.card-deck').css("z-index", "-1");
+}
+
 // Function to return information of current user profile
 function getCurrentUser() {
     // SERVER_CALL Get information of user profile from server
@@ -59,13 +68,17 @@ function getUserMedications() {
 // Will be replaced by user.getAppointments() eventually when server functionality added
 function getUserAppointments() {
     // Hard-code in appointments for now
-    const appt1 = new Appointment(0, "Regular Checkup", new dateTime("2019", "Feb","28",1100), new dateTime("2019", "Feb","28",1200));
+    const appt1 = new Appointment(0, "Regular Checkup", new dateTime("2019", "Feb","28",1100), new dateTime("2019", "Feb","28",1200), doctorList[1]);
 
     // Note: Adding appointments is done from doctor's side
     // Rescheduling appointments is a different functionality and may be initiated by either patients or doctors
     doctorList[1].addAppointment(user, appt1);
  
     return user.getAppointments();
+}
+
+function getUserNotifications() {
+    return user.getNotifications();
 }
 
 // Populates the User Profile information
@@ -153,7 +166,22 @@ function populate_medications() {
                                     '</p>'+
                                 '</div>'+
                                 '<div class="med-reminder-container">'+
-                                    '<a class="hover-pointer"><img class="invert-color" src="./resources/images/icons/med-notification-icon.png"></a>'+
+                                    '<div class="btn-group">'+
+                                        '<button class="btn"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">'+
+                                            '<img class="hover-pointer navbar-icon invert-color" src="./resources/images/icons/med-notification-icon.png">'+
+                                        '</button>'+
+                                            '<div class="dropdown-menu dropdown-menu-right">'+
+                                                '<h6 class="dropdown-header">Notification Frequency</h6>'+
+                                                '<div class="dropdown-divider"></div>'+
+                                                '<a onclick="clearNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
+                                                '<div class="dropdown-divider"></div>'+
+                                                '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
+                                                '<div class="dropdown-divider"></div>'+
+                                                '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
+                                                '<div class="dropdown-divider"></div>'+
+                                                '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
+                                            '</div>'+
+                                    '</div>'+
                                 '</div>'+
                             '</div>');
     }
@@ -179,14 +207,41 @@ function populate_appointments() {
                                         '</p>'+
                                     '</div>'+
                                     '<div class="med-reminder-container">'+
-                                        '<a><img class="appt-icon invert-color" src="./resources/images/icons/med-notification-icon.png"></a>'+
-                                        '<a><img class="" src="./resources/images/icons/calendar-icon-sm.png"></a>'+
+                                        '<div class="btn-group">'+
+                                            '<button class="btn"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">'+
+                                                '<img class="hover-pointer navbar-icon invert-color" src="./resources/images/icons/med-notification-icon.png">'+
+                                            '</button>'+
+                                                '<div class="dropdown-menu dropdown-menu-right">'+
+                                                    '<h6 class="dropdown-header">Notification Frequency</h6>'+
+                                                    '<div class="dropdown-divider"></div>'+
+                                                    '<a onclick="clearNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
+                                                    '<div class="dropdown-divider"></div>'+
+                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
+                                                    '<div class="dropdown-divider"></div>'+
+                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
+                                                    '<div class="dropdown-divider"></div>'+
+                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
+                                                '</div>'+
+                                        '</div>'+
                                     '</div>'+
                                 '</div>')
     }
 }
 
+function openNotifications() {
+    const notificationList = getUserNotifications();
 
+    // Don't stack notifications
+    $('#notification-dropdown').empty();
+
+    // Set everything else to back
+    $('.card-deck').css("z-index", "-1");
+
+    for (let i = 0; i < notificationList.length; i++) {
+        $('#notification-dropdown').append('<a onclick="removeNotification(\''+user.id+'\','+'\''+i+'\''+')" class="dropdown-item roboto-light" href="#">'+notificationList[i].description+'</a>'+
+                    '<div class="dropdown-divider"></div>')
+    }
+}
 
 // *************** Patient Profile Page ****************
 

@@ -55,12 +55,14 @@ class Appointment {
      * @param {string} name_ 
      * @param {dateTime} start_ 
      * @param {dateTime} end_ 
+     * @param {Patient or Doctor} with_ The person whom the meeting is with 
      */
-    constructor (id_, name_, start_, end_) {
+    constructor (id_, name_, start_, end_, with_) {
         this.id = id_;
         this.name = name_;
         this.start = start_;    // Start dateTime object
         this.end = end_;        // End dateTime object
+        this.with = with_;
     }
     
     getID () {
@@ -92,6 +94,10 @@ class Appointment {
         const date = this.start.month + " " + this.start.date.toString() + ", " + this.start.year;
 
         return date;
+    }
+
+    getWith() {
+        return this.with;
     }
 }
 

@@ -34,15 +34,16 @@ html, body {
     height:100%;
 }
 
+.navbar-logo {
+    height: 40px;
+    width: 40px;
+}
 .navbar {
     position:fixed;
     width:100%;
     background: none;
 }
-.navbar-logo {
-    height: 40px;
-    width: 40px;
-}
+
 .navbar-icon {
     transition: transform .2s; /* Animation */
 }
@@ -58,6 +59,11 @@ html, body {
 .nav-icon {
     list-style-type: none;
     margin-bottom:0;
+}
+
+.form-control {
+    width: 500px;
+    display: inline;
 }
 
 .card {
@@ -97,50 +103,80 @@ html, body {
     font-family: domine-bold;
 }
 
-.item-container {
-    min-height: 80px;
-    width:100%;
-	border-bottom: 1px solid grey;
-	float: left;
-}
 
-#assigned-doctors {
-    height:150px;
-    overflow:auto;
-}
-
-.doctor-container {
+.patient-container {
     padding-top:5px;
     padding-bottom:5px;
     min-height: 50px;
+    height:105px;
     width:100%;
-    float: left;
+    color:white;
 }
 
+.patient-container:hover {
+    background-color:grey;
+
+}
+.modal-patient-container {
+    padding-top:5px;
+    padding-bottom:5px;
+    min-height: 50px;
+    height:105px;
+    width:100%;
+    color:black;
+}
+.modal-patient-info-container{
+    float:left;
+    width:60%;
+    margin:0;
+    padding:0;
+    font-family:roboto-light;
+}
+.modal-patient-picture-container{
+    float:left;
+    width: 18%;
+}
+.modal-patient-icon-container {
+    float:right;
+    width:18%;
+}
+
+.patient-picture-container{
+    float:left;
+    width: 18%;
+}
+
+.patient-picture {
+    height:60px;
+    width:60px;
+    margin-top:5px;
+    border-radius:50%;
+    border: 2px solid white;
+
+}
+
+.patient-info-container{
+    float:left;
+    width:60%;
+    margin:0;
+    padding:0;
+    font-family:roboto-light;
+}
+.patient-icon-container {
+    float:right;
+    width:18%;
+}
+
+.med-info {
+    margin:0;
+}
 .info-container {
     overflow: auto;
-	height: 80px;
+	height: 100px;
 	width: 82%;
 	margin-right: 5px;
     margin-top:5px;
 	float: left;
-}
-
-.doctor-picture-container{
-    float:left;
-    width: 50px;
-}
-
-.doctor-picture {
-    height:40px;
-    width:38px;
-}
-
-.doctor-name-container{
-    float:right;
-    width:140px;
-    margin:0;
-    padding:0;
 }
 
 .med-reminder-container {
@@ -149,6 +185,7 @@ html, body {
     margin-top:5px;
 }
 
+
 .invert-color {
     filter: invert(100%);
 }
@@ -156,10 +193,6 @@ html, body {
 .card-subsection-name {
     font-family: domine;
     font-weight:bold;
-}
-
-.med-info {
-    margin:0;
 }
 
 .card-subsection-notes {
@@ -174,19 +207,6 @@ html, body {
     margin:0;
     margin-left:5px;
     font-size: 15px;
-}
-
-.profile-picture {
-	height:150px;
-	width:150px;
-    border-radius: 50%;
-    border: 2px solid white;
-    margin-left:48px;
-    margin-top:15px;
-}
-
-#documents-card {
-    z-index:-1;
 }
 
 .center-text {
@@ -211,4 +231,36 @@ hr {
 
 .roboto-light {
     font-family:roboto-light;
+}
+
+a.nav-link:link
+{
+   color:white;
+   text-decoration: none;
+}
+a.nav-link:visited
+{
+   color:white;
+   text-decoration: none;
+}
+a.nav-link:hover
+{
+   color: white;
+   text-decoration: none;
+}
+a.nav-link:active
+{
+   color: white;
+   text-decoration: none;
+}
+
+.clear-button {
+    background:none;
+    border: none;
+}
+.black {
+    color:black;
+}
+.black:hover {
+    color:black;
 }

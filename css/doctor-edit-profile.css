@@ -39,7 +39,10 @@ html, body {
     width:100%;
     background: none;
 }
-
+.navbar-logo {
+    width: 40px;
+    height: 40px;
+}
 .navbar-icon {
     transition: transform .2s; /* Animation */
 }
