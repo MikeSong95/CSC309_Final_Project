@@ -11,11 +11,11 @@ $(function() {
     // Make a set of fake users for now
     // createPatient will be removed when server calls are implemented
     createPatient(0,'password','patient1@gmail.com', '(123) 456 - 7890', 'Tammy', 'Adams','Female','Feb 1', '1234');
-    createPatient(1,'password','patient1@gmail.com', '(123) 111 - 1111', 'Joe', 'Adelaide','Male','Feb 1', '1234');
-    createPatient(2,'password','patient1@gmail.com', '(123) 222 - 2222', 'Fanny', 'Aristotle','Female','Feb 1', '1234');
-    createPatient(3,'password','patient1@gmail.com', '(123) 333 - 3333', 'Alan', 'Bell','Male','Feb 1', '1234');
-    createPatient(4,'password','patient1@gmail.com', '(123) 444 - 4444', 'Derick', 'Benson','Male','Feb 1', '1234');
-    createPatient(5,'password','patient1@gmail.com', '(123) 555 - 5555', 'Mark', 'Kazakevich','Male','Feb 1', '1234');
+    createPatient(1,'password','patient2@gmail.com', '(123) 111 - 1111', 'Joe', 'Adelaide','Male','Feb 1', '1234');
+    createPatient(2,'password','patient3@gmail.com', '(123) 222 - 2222', 'Fanny', 'Aristotle','Female','Feb 1', '1234');
+    createPatient(3,'password','patient4@gmail.com', '(123) 333 - 3333', 'Alan', 'Bell','Male','Feb 1', '1234');
+    createPatient(4,'password','patient5@gmail.com', '(123) 444 - 4444', 'Derick', 'Benson','Male','Feb 1', '1234');
+    createPatient(5,'password','patient6@gmail.com', '(123) 555 - 5555', 'Mark', 'Kazakevich','Male','Feb 1', '1234');
 
     getCurrentUser(2);
     populate_userInfo();
