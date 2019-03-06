@@ -168,7 +168,7 @@ function displaySearchResults(arr) {
         $("#patients").append('<div class="patient-container">'+
                                         '<a class="nav-link" href="patient-profile.html" >'+
                                             '<div class="patient-picture-container">'+
-                                                '<img class="patient-picture" src="./resources/images/icons/stockprofile-icon.png">' +
+                                                '<img class="patient-picture" src="./resources/images/mark.jpeg">' +
                                             '</div>'+
                                             '<div class="patient-info-container">'+
                                                 '<h6>'+arr[i].getFName() + " " + arr[i].getLName()+ '</h6>'+
@@ -176,6 +176,9 @@ function displaySearchResults(arr) {
                                                 '<h6>'+arr[i].getEmail()+'</h6>'+
                                             '</div>'+
                                         '</a>'+
+                                        '<div class="patient-icon-container">'+
+                                            '<img onclick="removePatient('+'\''+arr[i].getID()+'\''+')" class="hover-pointer navbar-icon delete-icon" src="./resources/images/icons/delete-icon.png">' +
+                                        '</div>'+
                                     '</div>')
     }
 }
