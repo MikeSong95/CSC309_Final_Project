@@ -50,3 +50,13 @@ Admin Dashboard:
 1.	Click the blue icon in the top left of the screen. A search bar will appear.
 2.	The search bar allows admins to search for users. Type “A” in the search bar. This will bring up all patients with names starting with A.
 3.	Selecting a name from the list will change the profile information on the left to correspond with that user.
+
+
+Patient Profile (Doctor view):
+
+The patient profile page (from the doctor’s view) displays the patient’s personal information, assigned doctors, upcoming appointments and current medications(name, dosage, and description). 
+- The doctor has the ability to add a new medication from the “Add Medication” button. The “save and submit” button adds the drug to the scrollable list of current medications.
+- More information about a drug can be displayed by clicking the expansion (plus sign) button beside each drug name. It can be re-collapsed by clicking it again.
+- The doctor can update or delete a current medication. 
+- When “Update Medication” is clicked, then the drug info can be edited in a textfield, and saved. Otherwise, it can be canceled and any changes are not saved.
+- The “Back” button brings the doctor back to their dashboard page.
