@@ -195,7 +195,7 @@ function populate_modal() {
                                                 '<div class="modal-patient-info-container">'+
                                                     '<h6>'+patientList[i].getFName() + " " + patientList[i].getLName()+'</h6>'+
                                                     '<h6>'+patientList[i].getPhoneNum()+'</h6>'+
-                                                    '<h6>'+patientList[i].getEmail() + " " + patientList[i].getLName()+'</h6>'+
+                                                    '<h6>'+patientList[i].getEmail() +'</h6>'+
                                                 '</div>'+
                                                 '<div class="modal-patient-icon-container">'+
                                                     '<a onclick="addToAddPatientList(event,' + '\''+ patientList[i].getID()+ '\''+')"><img class="hover-pointer patient-icon" src="./resources/images/icons/add-patient-icon.png"></a>'+
