@@ -1,0 +1,52 @@
+Instructions
+
+Patient Dashboard:
+
+0.Use the following credential to sign-in at index.html:
+		Username: user
+		Password: user
+1.	Click the bell beside a medication.
+2.	Select “5 Seconds (Demo) from the drop down menu.
+3.	Wait 5 seconds.
+4.	The bell at the top right corner will change to have an exclamation mark. Click it.
+5.	The notifications will appear here.
+6.	Click the notification to clear it from the list.
+7.	Click the bell beside the appointment.
+8.	Select “5 Seconds (Demo) from the drop down menu.
+9.	Wait 5 seconds.
+10.	See that the notification for the appointment appears in the notification list as well.
+11.	Stop the notifications by selecting “None” from the drop down menus of the medication and appointment you selected.
+12.	Click the bell at the top right again. Clicking on notifications in the list will clear them from the list. Clear all the notifications. The bell icon returns to its original icon.
+13.	Click the person icon beside the bell icon at the top right.
+a.	Selecting “Profile” will bring you to the “Edit Profile” page.
+b.	Selecting “Log Out” will return you to the index page.
+
+Doctor Dashboard:
+
+0.Use the following credential to sign-in at index.html:
+	Username: doctor
+	Password: doctor
+1.	The notifications beside the appointments work the same way as they do in the patient dashboard page.
+2.	Use the search bar to dynamically search for patients. For instance, type Mark and see how the patient list changes.
+3.	Click the + button beside the search bar.
+4.	A modal window pops up, listing all patients who are not patients of the current doctor.
+5.	Click the icon on the right to select patients who you wish to add. For instance, select Alice Lee and Some Body. (NOTE: Each patient can be selected, then unselected. To see this, click the icon on the right twice in a row).
+6.	When you have selected the patients, click “Done”.
+7.	You will now see the patients added to the patient list. They work with the search feature as well.
+8.	Click the + button beside the search bar again.
+9.	You will notice the patients you have added are no longer listed as patients you can add.
+10.	Click the X beside any of the patients names. This will remove the patients from your assigned patients. The patients you have removed will appear in the patients to add list.
+11.	Clicking on any patient in the patient list will bring you to the patient profile page.
+12.	Click the person icon beside the bell icon at the top right.
+a.	Selecting “Profile” will bring you to the “Edit Profile” page.
+b.	Selecting “Log Out” will return you to the index page.
+
+
+Admin Dashboard:
+
+0.	Use the following credential to sign-in at index.html:
+		Username: admin
+		Password: admin
+1.	Click the blue icon in the top left of the screen. A search bar will appear.
+2.	The search bar allows admins to search for users. Type “A” in the search bar. This will bring up all patients with names starting with A.
+3.	Selecting a name from the list will change the profile information on the left to correspond with that user.

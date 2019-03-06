@@ -13,15 +13,14 @@ function signInClicked(e){
         window.location.href = "patient-dashboard.html";
     }
 
-    else if(username=="doctor" && password=="doctor"){
-
-        //TODO: add doctor profile page here
-        //window.location.href = "doctor-dashboard.html";
+    else if(username=="doctor" && password=="doctor"){  
+        window.location.href = "doctor-dashboard.html";
     }
 
     else if(username=="admin" && password=="admin"){
-        //TODO: add admin profile page
+        window.location.href = "admin-dashboard.html";
     }
+    
     else{
         error.innerHTML = "Invalid username/password!";
     }
