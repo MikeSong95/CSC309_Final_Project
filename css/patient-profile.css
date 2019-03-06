@@ -2,6 +2,8 @@
 #main-profile-card {
     padding-top: 15px;
     min-width: 825px;
+    min-height:650px;
+    overflow:auto;
 }
 
 #profile-card {
@@ -10,11 +12,23 @@
 
 #profile-body {
     font-family: domine-bold;
-    height:500px;
     padding-top:10px;
     padding-left: 15px;
+    height:70%;
 }
-
+.info-container {
+    overflow: auto;
+	height: 80px;
+	width: 100%;
+	margin-right: 5px;
+    margin-top:5px;
+	float: left;
+}
+#appointments-card {
+    min-height:80px;
+    max-height:200px;
+    margin: 20px;
+}
 #appointment-button {
     font-family: domine=bold;
 }
@@ -38,15 +52,18 @@
     margin: 20px;
 }
 
+
 .med-container {
     margin-left: 10px;
     overflow: auto;
-    max-height: 460px;
+    max-height:250px;
+    margin-right:40px;
 }
 
 .med-list-item {
     margin-bottom: 30px;
 }
+
 
 .med-edit {
     padding: 10px;
@@ -90,4 +107,30 @@
 #update-med {
     float: right;
     padding-bottom: 10px;
+}
+
+.card-subsection-name, .card-subsection-h1{
+    margin-left: 20px;
+}
+
+.btn-lg {
+    background:none;
+    width:260px;
+    color:white;
+    margin-top:35px;
+}
+
+.left {
+    float:left;
+}
+
+.right {
+    float:right;
+    margin-right:15px;
+}
+
+.btn-sm{
+    background:none;
+    color:white;
+    margin-top:45px;
 }

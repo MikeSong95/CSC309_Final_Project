@@ -68,33 +68,28 @@
                         <div class="contact-info center-text ">
 
                         </div>
+                        
                     </div>
+
                 </div>
                 <!-- main board -->
                 <div id="main-profile-card" class="card">
-                    <div id="button-header">
-                        <a id="appointment-button" href="">
-                            Book Appointment
-                        </a>
-                        
-                        <span class="back">  
-                            <!-- URL will be replaced with doctor profile page-->
-                            <form action="./doctor-dashboard.html" method="POST">
-                                <button type="submit" class="btn btn-secondary btn-sm">Back</button>
-                            </form>
-                            <!-- <button type="button" class="btn btn-secondary btn-sm">Back</button> -->
-                        </span>
+                    <div id="appointments-card">
+                        <h4 class="card-name">Upcoming Appointments</h4>
+                        <div id="appt-list" class="card-body">
+                            
+                        </div>
                     </div>
-                    <hr>
                     <div id="profile-body">
-                        <h4>Current Medications</h4>
+                        <h4 class="card-name">Current Medications</h4>
                         <div class="med-container">
-                            <div id="assigned-med-list"></div>
+                            <div id="assigned-med-list" class="card-body">
+
+                            </div>
                         </div>
                     </div>
                 </div>
-
-
+                
             </div>
         </div>
     </div>
@@ -110,7 +105,7 @@
     <script src="js/appointments.js"></script>
     <script src="js/medications.js"></script>
     <script src="js/users.js"></script>
-    <script src="js/patient-dashboard.js"></script>
+    <script src="js/patient-profile.js"></script>
 </body>
 
 </html>
