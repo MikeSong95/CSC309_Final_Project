@@ -12,16 +12,16 @@ $(function() {
     // createPatient will be removed when server calls are implemented
     createPatient(0,'password','patient1@gmail.com', '(123) 456 - 7890', 'Tammy', 'Adams','Female','Feb 1', '1234');
     createPatient(1,'password','patient1@gmail.com', '(123) 111 - 1111', 'Joe', 'Adelaide','Male','Feb 1', '1234');
-    createPatient(2,'password','patient1@gmail.com', '(123) 222 - 2222', 'Alan', 'Bell','Male','Feb 1', '1234');
-    createPatient(3,'password','patient1@gmail.com', '(123) 333 - 3333', 'Derick', 'Benson','Male','Feb 1', '1234');
-    createPatient(4,'password','patient1@gmail.com', '(123) 444 - 4444', 'Mark', 'Kazakevich','Male','Feb 1', '1234');
+    createPatient(2,'password','patient1@gmail.com', '(123) 222 - 2222', 'Fanny', 'Aristotle','Female','Feb 1', '1234');
+    createPatient(3,'password','patient1@gmail.com', '(123) 333 - 3333', 'Alan', 'Bell','Male','Feb 1', '1234');
+    createPatient(4,'password','patient1@gmail.com', '(123) 444 - 4444', 'Derick', 'Benson','Male','Feb 1', '1234');
+    createPatient(5,'password','patient1@gmail.com', '(123) 555 - 5555', 'Mark', 'Kazakevich','Male','Feb 1', '1234');
 
     getCurrentUser(2);
     populate_userInfo();
     populate_assignedDoctors();
 
     $("#sidebar-toggle").click(function(e) {
-        console.log("sidebar-toggled click event handled!");
         e.preventDefault();
         $("#page-wrapper").toggleClass("sidebarDisplayed");
     });
@@ -60,6 +60,7 @@ function getAssignedDoctors() {
 function populate_userInfo() {
     // User name
     const nameContainer = document.querySelector("#user-name");
+    nameContainer.innerHTML = "";
     nameContainer.setAttribute('class', 'card-subsection-name')
     const name = document.createTextNode(user.getFName() + " " + user.getLName());
     const nameElement = document.createElement('h4');
@@ -68,6 +69,7 @@ function populate_userInfo() {
 
     // Contact info
     const contactInfoContainer = document.querySelector('.contact-info');
+    contactInfoContainer.innerHTML = "";
     const phoneNumNode = document.createTextNode(user.getPhoneNum());
     contactInfoContainer.appendChild(phoneNumNode);
     const emailElement = document.createElement('span');
@@ -279,10 +281,15 @@ function autocomplete(inp, arr) {
           b.innerHTML += arr[i].lName.substr(val.length);
           /*insert a input field that will hold the current array item's value:*/
           b.innerHTML += "<input type='hidden' value='" + arr[i].lName + "'>";
+
+          let index = i;
           /*execute a function when someone clicks on the item value (DIV element):*/
           b.addEventListener("click", function(e) {
               /*insert the value for the autocomplete text field:*/
+              getCurrentUser(index);          
               inp.value = this.getElementsByTagName("input")[0].value; // Call populate_UserInfo() here.
+//
+              populate_userInfo();
               /*close the list of autocompleted values,
               (or any other open lists of autocompleted values:*/
               closeAllLists();
