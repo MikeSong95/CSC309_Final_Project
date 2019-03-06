@@ -15,8 +15,17 @@
     padding-left: 15px;
 }
 
-#appointment-button {
+.appointment-button {
     font-family: domine=bold;
+    padding: 10px;
+    margin-left: 15px;
+    max-width: 230px;
+}
+
+#appt-title {
+    font-family: domine-bold;
+    margin-left: 15px;
+    font-size: 20px;
 }
 
 #button-header a {
