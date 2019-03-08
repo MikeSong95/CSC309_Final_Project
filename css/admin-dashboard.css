@@ -73,7 +73,7 @@ html, body {
 }
 
 .card-body {
-    height:500px;
+    height:640px;
     overflow:auto;
     padding-top:0px;
 }
