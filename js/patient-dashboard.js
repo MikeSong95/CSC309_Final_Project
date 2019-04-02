@@ -260,7 +260,7 @@ function edit_medications_form() {
         const original_text = $(textDiv).text();
         $(textDiv).empty();
         $(textDiv).append(
-            '<textarea rows="4" cols= "75" type="text" >' +
+            '<textarea rows="4" cols= "45" type="text" >' +
             original_text +
             '</textarea>'
         );
@@ -329,7 +329,7 @@ function medication_form() {
                 '<textarea rows="1" type="text"></textarea>' +
             '</span>' +
             '<div>Description: </div>' +
-            '<textarea rows="4" cols= "75" type="text" ></textarea>' +
+            '<textarea rows="4" cols= "55" type="text" ></textarea>' +
         '</div>' +
         '<button type="button" class="btn btn-outline-light" id="new-med-button">Save and Submit</button>' +
         '<button type="button" class="btn btn-outline-light" id="cancel-new-med">Cancel</button>'
@@ -378,7 +378,8 @@ function populate_assigned_medications() {
             '<div class="med-list-item">'+
                 '<p>'+
                     '<span class="med-title">'+
-                        medicationList[i]['name']+
+                        medicationList[i]['name']+ 
+                        // " (" + medicationList[i]['dosage'] + ")" +
                     '</span>'+
                     '<img src="./resources/images/icons/expandplus-icon.png" class="expand" data-toggle="collapse" href="#collapseExample' + i + 
                             '" role="button" aria-expanded="false" aria-controls="collapseExample"/>' +

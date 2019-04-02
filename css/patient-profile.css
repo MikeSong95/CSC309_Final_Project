@@ -1,7 +1,7 @@
 
 #main-profile-card {
     padding-top: 15px;
-    min-width: 825px;
+    min-width: 610px;
 }
 
 #profile-card {
@@ -99,4 +99,13 @@
 #update-med {
     float: right;
     padding-bottom: 10px;
+}
+
+#book {
+    max-width: 200px;
+    padding: 8px;
+}
+
+.book_input {
+    
 }

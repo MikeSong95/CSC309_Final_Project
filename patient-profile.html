@@ -80,15 +80,38 @@
                 <!-- main board -->
                 <div id="main-profile-card" class="card">
                     <div id="button-header">
-                        <span class="back">  
-                            <!-- URL will be replaced with doctor profile page-->
+                        <span class="back">
                             <form action="./doctor-dashboard.html" method="POST">
                                 <button type="submit" class="btn btn-secondary btn-sm">Back</button>
                             </form>
                             <!-- <button type="button" class="btn btn-secondary btn-sm">Back</button> -->
                         </span>
-                        <div id=appt-title>Upcoming Appointments</div>
-                        <div id="appt-list" class="appointment-button"></div>
+                        <div>
+                            <div id=appt-title>Upcoming Appointments</div>
+                            <div id="appt-list" class="appointment-button"></div>
+                        </div>
+
+                        <!-- <div id="book">
+                        <form action="" method="post">
+                            <div>
+                                
+                                <label>Type:</label>
+                                <input type="text" name="email"/> 
+                            </div>
+                            <div>
+                                <label>Time:</label>
+                                <input type="text" name="password"/>
+                            </div>
+                            <div>
+                                <label>Date:</label>
+                                <input type="text" name="password"/>
+                            </div>
+                            <div>
+                                
+                                <input class="btn btn-primary" type="submit" value="Book Appointment"/>
+                            </div>
+                        </div> -->
+                        <!-- <button onclick="book_appointment()" type="button" class="btn btn-secondary btn-sm" id="book">Book Appointment</button> -->
                     </div>
                     <hr>
                     <div id="profile-body">
@@ -98,6 +121,47 @@
                         </div>
                     </div>
                 </div>
+                <form id="book" class="card">
+                    <div class="form-group" class="book_input">
+                        <label for="exampleFormControlInput1">Appointment:</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1"
+                            placeholder="Appointment Type">
+                    </div>
+                    <div class="form-group" class="book_input">
+                        <label for="exampleFormControlInput1">Start time:</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1"
+                            placeholder="Start time">
+                    </div>
+                    <div class="form-group" class="book_input">
+                        <label for="exampleFormControlInput1">End time:</label>
+                        <input type="text" class="form-control" id="exampleFormControlInput1"
+                            placeholder="End time">
+                    </div>
+                    <div class="form-group" class="book_input">
+                        <label for="exampleFormControlSelect1">Month:</label>
+                        <select class="form-control" id="exampleFormControlSelect1">
+                            <option>Jan</option>
+                            <option>Feb</option>
+                            <option>Mar</option>
+                            <option>Apr</option>
+                            <option>May</option>
+                            <option>Jun</option>
+                            <option>Jul</option>
+                            <option>Aug</option>
+                            <option>Sep</option>
+                            <option>Oct</option>
+                            <option>Nov</option>
+                            <option>Dec</option>
+                        </select>
+                        <div class="form-group" class="book_input">
+                            <label for="exampleFormControlInput1">Year:</label>
+                            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Year">
+                        </div>
+                    </div>
+                    <input class="btn btn-secondary btn-sm" type="submit" value="Book Appointment"/>
+
+
+                </form>
 
 
             </div>
