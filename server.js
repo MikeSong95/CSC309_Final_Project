@@ -16,7 +16,6 @@ const { Doctor } = require('./models/doctor');
 // Express
 const port = process.env.PORT || 3000
 const app = express();
-const path = require('path');
 
 // Body parser for data
 app.use(bodyParser.json());
