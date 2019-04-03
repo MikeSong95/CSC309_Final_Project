@@ -8,18 +8,12 @@
     "body-parser": "^1.18.3",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
-<<<<<<< HEAD
     "express-session": "^1.15.6",
     "mongod": "^2.0.0",
     "mongodb": "^3.2.2",
     "mongoose": "^5.4.19",
-    "node-gyp": "^3.8.0"
-=======
-    "heroku": "^7.22.7",
-    "mongod": "^2.0.0",
-    "mongodb": "^3.2.2",
-    "mongoose": "^5.4.20"
->>>>>>> 36f0e77ff3adb5e0155bd5dc061f2f9d7175b367
+    "node-gyp": "^3.8.0",
+    "heroku": "^7.22.7"
   },
   "devDependencies": {},
   "scripts": {
