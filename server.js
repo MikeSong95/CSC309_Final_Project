@@ -16,7 +16,6 @@ const { Doctor } = require('./models/doctor');
 // Express
 const port = process.env.PORT || 3000
 const app = express();
-const path = require('path');
 
 // Body parser for data
 app.use(bodyParser.json());
@@ -29,8 +28,9 @@ app.engine('ejs', require('ejs').renderFile);
 app.set('view engine', 'ejs');
 
 // Service static files
-app.use(express.static(path.join(__dirname, 'public')));
 app.set('views', path.join(__dirname, 'views'));
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 const session = require('express-session')
 
