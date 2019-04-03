@@ -85,6 +85,17 @@ app.get("/doctor-dashboard", (req,res) => {
 	}
 });
 
+// Route to patient profile page
+// Require email of patient in query to pass to patient profile page
+app.get("/patient-profile", (req, res) => {
+	// check if we have active session cookie
+	if (req.session.user) {
+		res.render("patient-profile", {email: req.query.email});
+	} else {
+		res.redirect('/')
+	}
+});
+
 // Route to create user
 app.get("/create-user", (req, res) => {
 	res.render("create-user");

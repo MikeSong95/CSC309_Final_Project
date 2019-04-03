@@ -142,7 +142,7 @@ function populate_patients() {
 
     for (let i = 0; i < patients.length; i++) {
         $("#patients").append('<div class="patient-container">'+
-                                        '<a class="nav-link" href="patient-profile.html" >'+
+                                        '<a class="nav-link"  href="patient-profile?email='+user.getEmail()+'">'+
                                             '<div class="patient-picture-container">'+
                                                 '<img class="patient-picture" src="./resources/images/mark.jpeg">' +
                                             '</div>'+
@@ -180,7 +180,7 @@ function displaySearchResults(arr) {
 
     for (let i = 0; i < arr.length; i++) {
         $("#patients").append('<div class="patient-container">'+
-                                        '<a class="nav-link" href="patient-profile.html" >'+
+                                        '<a class="nav-link" href="patient-profile?email='+user.getEmail()+'" >'+
                                             '<div class="patient-picture-container">'+
                                                 '<img class="patient-picture" src="./resources/images/mark.jpeg">' +
                                             '</div>'+
