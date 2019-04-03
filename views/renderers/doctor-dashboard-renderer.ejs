@@ -1,7 +1,6 @@
 <script>
     /* PATIENT DASHBOARD DOM FUNCTIONS */
 
-// Make user a global variable for now
 let user;
 let user_data;
 let add_patient_list = [];
@@ -20,7 +19,7 @@ $(function() {
     searchForm.addEventListener('input', dynamicSearch);
 
     getCurrentUser();
-    user = createDoctor(user_data._id, user_data.password, user_data.email,user_data.phone, user_data.fName, user_data.lName, user_data.specialty, user_data.address, user_data.assignedPatients);
+    user = createDoctor(user_data._id, user_data.password, user_data.email,user_data.phone, user_data.fName, user_data.lName, user_data.specialty, user_data.address, user_data.assignedPatients, user_data.appointments, user_data.notifications);
 
     getAllPatients();
 
@@ -55,7 +54,7 @@ function getCurrentUser() {
 
             // Convert assigned patients array into actual patient objects
             user_data.assignedPatients = user_data.assignedPatients.map(function(user_data) {
-                return createPatient(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.gender,user_data.bday,user_data.hcNum);
+                return createPatient(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.gender,user_data.bday,user_data.hcNum, user_data.appointments_, user_data.notifications_, user_data.assignedDoctors_, user_data.medications_);
             });
         },
         async: false
@@ -71,7 +70,7 @@ function getAllPatients() {
 
             // Convert patients in patientList to actual patient objects
             patientList = patientListData.map(function(user_data) {
-                return createPatient(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.gender,user_data.bday,user_data.hcNum);
+                return createPatient(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.gender,user_data.bday,user_data.hcNum, user_data.appointments_, user_data.notifications_, user_data.assignedDoctors_, user_data.medications_);
             });
         },
         async: false

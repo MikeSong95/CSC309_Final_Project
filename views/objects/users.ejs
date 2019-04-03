@@ -37,15 +37,15 @@ class User {
 
 // Patient class inherits general user class
 class Patient extends User {
-    constructor  (id_, password_, email_, phoneNum_, fName_, lName_, gender_, bday_, hcNum_) {
+    constructor  (id_, password_, email_, phoneNum_, fName_, lName_, gender_, bday_, hcNum_, appointments_, notifications_, assignedDoctors_, medications_) {
         super (id_, password_, email_, phoneNum_, fName_, lName_);
         this.gender = gender_;
         this.bday = bday_;
         this.hcNum = hcNum_;
-        this.notifications = [];
-        this.appointments = [];    // Empty list of appointment IDs
-        this.assignedDoctors = []; // Empty list of assigned doctors
-        this.medications = [];     // Empty list of assigned medications
+        this.notifications = notifications_;
+        this.appointments = appointments_;    
+        this.assignedDoctors = assignedDoctors_; 
+        this.medications = medications_;    
     }
 
     /* Accessors */
@@ -107,13 +107,13 @@ class Patient extends User {
 
 // Doctor class inherits general user class
 class Doctor extends User {
-    constructor (id_, password_, email_, phoneNum_, fName_, lName_, specialty_, address_, assignedPatients_) {
+    constructor (id_, password_, email_, phoneNum_, fName_, lName_, specialty_, address_, assignedPatients_, appointments_, notifications_) {
         super (id_, password_, email_, phoneNum_, fName_, lName_);
         this.specialty = specialty_;
         this.address = address_;
-        this.notifications = [];
+        this.notifications = notifications_;
         this.assignedPatients = assignedPatients_;
-        this.appointments = [];
+        this.appointments = appointments_;
     }
 
     /* Accessors */
@@ -198,14 +198,14 @@ class Doctor extends User {
 }
 
 // Creates a new patient object and adds it to the global array
-function createPatient(id_, password_, email_, phoneNum_,fName_, lName_, gender_, bday_, hcNum_) {
-    const newPatient = new Patient (id_, password_, email_, phoneNum_,fName_, lName_, gender_, bday_, hcNum_);
+function createPatient(id_, password_, email_, phoneNum_,fName_, lName_, gender_, bday_, hcNum_, appointments_, notifications_, assignedDoctors_, medications_) {
+    const newPatient = new Patient (id_, password_, email_, phoneNum_,fName_, lName_, gender_, bday_, hcNum_, appointments_, notifications_, assignedDoctors_, medications_);
     return newPatient;
 }
 
 // Creates a new doctor object and adds it to the global array
-function createDoctor(id_, password_, email_, phoneNum_, fName_, lName_, specialty_, address_, assignedPatients_) {
-    const newDoctor = new Doctor (id_, password_, email_, phoneNum_, fName_, lName_, specialty_, address_, assignedPatients_);
+function createDoctor(id_, password_, email_, phoneNum_, fName_, lName_, specialty_, address_, assignedPatients_, appointments_,notifications_) {
+    const newDoctor = new Doctor (id_, password_, email_, phoneNum_, fName_, lName_, specialty_, address_, assignedPatients_, appointments_, notifications_);
    return newDoctor;
 }
 
