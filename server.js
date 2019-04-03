@@ -14,10 +14,12 @@ const path = require('path');
 // Express
 const port = process.env.PORT || 3000
 const app = express();
+
 app.use(bodyParser.json());
+app.use(express.static(__dirname + '/public'));
 
 app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname + '/index.html'));
+    res.sendFile('index.html');
 });
 
 app.listen(port, () => {
