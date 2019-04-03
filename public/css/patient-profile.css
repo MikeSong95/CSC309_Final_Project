@@ -1,0 +1,102 @@
+
+#main-profile-card {
+    padding-top: 15px;
+    min-width: 825px;
+}
+
+#profile-card {
+    max-width: 300px;
+}
+
+#profile-body {
+    font-family: domine-bold;
+    height:500px;
+    padding-top:10px;
+    padding-left: 15px;
+}
+
+.appointment-button {
+    font-family: domine=bold;
+    padding: 10px;
+    margin-left: 15px;
+    max-width: 230px;
+}
+
+#appt-title {
+    font-family: domine-bold;
+    margin-left: 15px;
+    font-size: 20px;
+}
+
+#button-header a {
+    font-family: domine-bold;
+    color: white;
+    font-size: 22px;
+    padding: 15px;
+}
+
+.expand {
+    margin-left: 10px;
+    height: 22px;
+    width: 22px;
+    background-color: white;
+    border-radius: 50%;
+}
+
+#assigned-med-list {
+    margin: 20px;
+}
+
+.med-container {
+    margin-left: 10px;
+    overflow: scroll;
+    max-height: 460px;
+}
+
+.med-list-item {
+    margin-bottom: 30px;
+}
+
+.med-edit {
+    padding: 10px;
+    float:right;
+}
+
+.med-add {
+    position: absolute;
+    bottom: 25px;
+    left: 30px;
+}
+
+.med-notes {
+    font-family:roboto-light;
+    font-size: 15px;
+    width: 568px;
+    min-height: 100px
+    /* overflow: auto; */
+}
+
+.med-title {
+    font-size: 20px;
+}
+
+.back {
+    position: absolute;
+    right: 20px;
+}
+
+#new-medication-form {
+    padding: 10px;
+    background-color: slategray;
+}
+
+.med-input {
+    display: inline-block;
+    margin-bottom: 5px;
+    margin-right: 10px;
+}
+
+#update-med {
+    float: right;
+    padding-bottom: 10px;
+}

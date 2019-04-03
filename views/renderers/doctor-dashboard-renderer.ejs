@@ -1,0 +1,286 @@
+<script>
+    /* PATIENT DASHBOARD DOM FUNCTIONS */
+
+// Make user a global variable for now
+let user;
+let user_data;
+let add_patient_list = [];
+let patientList = [];
+
+// Populate DOM with server data on page load
+$(function() {
+    $('[data-toggle="popover"]').popover()
+    $().popover({container: 'body'})
+
+    $('#myModal').on('shown.bs.modal', function () {
+        $('#add-patient-trigger').trigger('focus')
+      })
+
+    const searchForm = document.querySelector('#search-form');
+    searchForm.addEventListener('input', dynamicSearch);
+
+    getCurrentUser();
+    user = createDoctor(user_data._id, user_data.password, user_data.email,user_data.phone, user_data.fName, user_data.lName, user_data.specialty, user_data.address, user_data.assignedPatients);
+
+    getAllPatients();
+
+    populate_appointments();
+    populate_patients();
+});
+
+document.addEventListener("click", function() {
+    $('#patients-card').css("z-index", "1");
+});
+
+function bringToFront() {
+        // Set everything else to back
+        $('#patients-card').css("z-index", "-1");
+}
+
+function update() {
+    location.reload();
+}
+
+// Function to return information of current user profile
+function getCurrentUser() {
+    // SERVER_CALL Get information of user profile from server
+    const userEmail = "<%-email%>";
+
+    // SERVER_CALL Get information of user profile from server
+    $.get({
+        url:"/doctors",
+        data: {email:userEmail},
+        success: function(res) {
+            user_data = res[0];
+
+            // Convert assigned patients array into actual patient objects
+            user_data.assignedPatients = user_data.assignedPatients.map(function(user_data) {
+                return createPatient(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.gender,user_data.bday,user_data.hcNum);
+            });
+        },
+        async: false
+    });
+}
+
+function getAllPatients() {
+     // SERVER_CALL Get information of all patients from server
+     $.get({
+        url:"/allPatients",
+        success: function(res) {
+            const patientListData = JSON.parse(JSON.stringify(res));
+
+            // Convert patients in patientList to actual patient objects
+            patientList = patientListData.map(function(user_data) {
+                return createPatient(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.gender,user_data.bday,user_data.hcNum);
+            });
+        },
+        async: false
+    });
+}
+
+// Function to get list of user's patients
+function getUserPatients() {
+    return user.getPatients();
+}
+
+// Function to get list of user's appointments
+function getUserAppointments() {
+    return user.getAppointments();
+}
+
+function getUserNotifications() {
+    return user.getNotifications();
+}
+
+// Populate the "Appointments" section
+function populate_appointments() {
+    const appointmentList = getUserAppointments();
+
+    for (let i = 0; i < appointmentList.length; i++) { 
+        $('#appt-list').append('<div class="item-container">'+
+                                    '<div class="info-container">'+
+                                        '<p class="med-info">'+
+                                            '<span class="card-subsection-name">'+
+                                                appointmentList[i].getName()+
+                                            '</span>'+
+                                            '<div class="card-subsection-h1">'+
+                                                appointmentList[i].getWith().getFName()+ " " +  appointmentList[i].getWith().getLName() +
+                                            '</div>'+
+                                            '<div class="card-subsection-h1">'+
+                                                appointmentList[i].getStartTime()+ " - " + appointmentList[i].getEndTime()+
+                                            '</div>'+
+                                            '<div class="card-subsection-h1">'+
+                                                appointmentList[i].getDate()+
+                                            '</div>'+
+                                        '</p>'+
+                                    '</div>'+
+                                    '<div class="med-reminder-container">'+
+                                        '<div class="btn-group">'+
+                                            '<button class="btn"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">'+
+                                                '<img class="hover-pointer navbar-icon invert-color" src="./resources/images/icons/med-notification-icon.png">'+
+                                            '</button>'+
+                                                '<div class="dropdown-menu dropdown-menu-right">'+
+                                                    '<h6 class="dropdown-header">Notification Frequency</h6>'+
+                                                    '<div class="dropdown-divider"></div>'+
+                                                    '<a onclick="clearDoctorNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
+                                                    '<div class="dropdown-divider"></div>'+
+                                                    '<a onclick="createDoctorNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
+                                                    '<div class="dropdown-divider"></div>'+
+                                                    '<a onclick="createDoctorNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
+                                                    '<div class="dropdown-divider"></div>'+
+                                                    '<a onclick="createDoctorNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
+                                                '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>')
+    }
+}
+
+function populate_patients() {
+    
+    const patients = getUserPatients();
+    $("#patients").empty();
+
+    for (let i = 0; i < patients.length; i++) {
+        $("#patients").append('<div class="patient-container">'+
+                                        '<a class="nav-link" href="patient-profile.html" >'+
+                                            '<div class="patient-picture-container">'+
+                                                '<img class="patient-picture" src="./resources/images/mark.jpeg">' +
+                                            '</div>'+
+                                            '<div class="patient-info-container">'+
+                                                '<h6>'+patients[i].getFName() + " " + patients[i].getLName()+ '</h6>'+
+                                                '<h6>'+patients[i].getPhoneNum()+'</h6>'+
+                                                '<h6>'+patients[i].getEmail()+'</h6>'+
+                                            '</div>'+
+                                            '</a>'+
+                                            '<div class="patient-icon-container">'+
+                                                '<img onclick="removePatient('+'\''+patients[i].getID()+'\''+')" class="hover-pointer navbar-icon delete-icon" src="./resources/images/icons/delete-icon.png">' +
+                                            '</div>'+
+                                        
+                                    '</div>')
+    }
+}
+
+function openNotifications() {
+    const notificationList = getUserNotifications();
+
+    // Don't stack notifications
+    $('#notification-dropdown').empty();
+
+    // Set everything else to back
+    $('#patients-card').css("z-index", "-1");
+
+    for (let i = 0; i < notificationList.length; i++) {
+        $('#notification-dropdown').append('<a onclick="removeDoctorNotification(\''+user.id+'\','+'\''+i+'\''+')" class="dropdown-item roboto-light" href="#">'+notificationList[i].description+'</a>'+
+                    '<div class="dropdown-divider"></div>')
+    }
+}
+
+function displaySearchResults(arr) {
+    $("#patients").empty();
+
+    for (let i = 0; i < arr.length; i++) {
+        $("#patients").append('<div class="patient-container">'+
+                                        '<a class="nav-link" href="patient-profile.html" >'+
+                                            '<div class="patient-picture-container">'+
+                                                '<img class="patient-picture" src="./resources/images/mark.jpeg">' +
+                                            '</div>'+
+                                            '<div class="patient-info-container">'+
+                                                '<h6>'+arr[i].getFName() + " " + arr[i].getLName()+ '</h6>'+
+                                                '<h6>'+arr[i].getPhoneNum()+'</h6>'+
+                                                '<h6>'+arr[i].getEmail()+'</h6>'+
+                                            '</div>'+
+                                        '</a>'+
+                                        '<div class="patient-icon-container">'+
+                                            '<img onclick="removePatient('+'\''+arr[i].getID()+'\''+')" class="hover-pointer navbar-icon delete-icon" src="./resources/images/icons/delete-icon.png">' +
+                                        '</div>'+
+                                    '</div>')
+    }
+}
+
+function populate_modal() {
+    const assignedPatients = getUserPatients();
+    console.log(assignedPatients);
+    console.log(patientList[0]);
+    $("#add-patient").empty();
+    for (let i = 0; i < patientList.length; i++) {
+        if (assignedPatients.includes(patientList[i]) === false) {
+            $("#add-patient").append('<div class="modal-patient-container">'+
+                                                '<div class="patient-picture-container">'+
+                                                    '<img class="invert-color patient-picture" src="./resources/images/icons/stockprofile-icon.png">'+
+                                                '</div>'+
+                                                '<div class="modal-patient-info-container">'+
+                                                    '<h6>'+patientList[i].getFName() + " " + patientList[i].getLName()+'</h6>'+
+                                                    '<h6>'+patientList[i].getPhoneNum()+'</h6>'+
+                                                    '<h6>'+patientList[i].getEmail() +'</h6>'+
+                                                '</div>'+
+                                                '<div class="modal-patient-icon-container">'+
+                                                    '<a onclick="addToAddPatientList(event,' + '\''+ patientList[i].getID()+ '\''+')"><img class="hover-pointer patient-icon" src="./resources/images/icons/add-patient-icon.png"></a>'+
+                                                '</div>'+
+                                            '</div>')
+        }
+       
+    }
+}
+
+// Event handler for user typing into textbox
+function dynamicSearch(e) {
+    let stringToMatch = e.target.value.toLowerCase();
+    let patients = getUserPatients();
+	let matchArray = [];
+
+	if (stringToMatch != undefined) {
+		for (let i = 0; i < patients.length; i++) {
+			// Search for stringToMatch properties
+			// NOTE: We want to match directly (index to index, not simply contains substring)
+			if (String(patients[i].getFName()+" " + patients[i].getLName()).substring(0,stringToMatch.length).toLowerCase().includes(stringToMatch) ||
+                patients[i].getLName().substring(0,stringToMatch.length).toLowerCase().includes(stringToMatch) || 
+                patients[i].getPhoneNum().substring(0,stringToMatch.length).toLowerCase().includes(stringToMatch) ||
+                patients[i].getEmail().substring(0,stringToMatch.length).toLowerCase().includes(stringToMatch)
+			) {
+				matchArray.push(patients[i]);
+			}
+		}
+	} else {
+        populate_patients();
+    }
+
+	displaySearchResults(matchArray);
+}
+
+function addToAddPatientList(e,userID) {
+    // Find user
+    for (let i = 0; i < patientList.length; i++) {
+        if (patientList[i].getID() == userID) {
+            if (add_patient_list.includes(patientList[i])) {
+                // Already included it, so remove it
+                const index = add_patient_list.indexOf(patientList[i]);
+                add_patient_list.splice(index, 1);
+                e.target.setAttribute("src", "./resources/images/icons/add-patient-icon.png"); 
+                break
+            } else {
+                 // Haven't included it, so add it
+                add_patient_list.push(patientList[i]);
+                e.target.setAttribute("src","./resources/images/icons/added-icon.png" ); 
+                break;
+            }
+
+        }
+    }
+}
+
+function addAddPatientList() {
+    for (let i = 0; i < add_patient_list.length; i++) {
+        user.assignPatient(add_patient_list[i]);
+    }
+console.log("Here!")
+location.reload();
+    add_patient_list = [];
+    populate_patients();
+}
+
+function removePatient(patientID) {
+    user.unassignPatient(patientID);
+    populate_patients();
+}
+</script>

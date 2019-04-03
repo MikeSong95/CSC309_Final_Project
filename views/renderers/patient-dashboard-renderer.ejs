@@ -1,0 +1,399 @@
+<script>
+
+/* PATIENT DASHBOARD DOM FUNCTIONS */
+
+// Make user a global variable for now
+let user_data;
+
+// User object
+let user;
+
+// Populate DOM with server data on page load
+$(function() {
+    getCurrentUser();
+
+    // Create a User object based off of data received from POST
+    user = createPatient(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.gender,user_data.bday,user_data.hcNum);
+
+    populate_userInfo();
+    populate_assignedDoctors();
+    populate_medications();
+    populate_appointments();
+    populate_assigned_medications();
+});
+
+document.addEventListener("click", function() {
+    $('.card-deck').css("z-index", "1");
+});
+
+function bringToFront() {
+        // Set everything else to back
+        $('.card-deck').css("z-index", "-1");
+}
+
+// Function to return information of current user profile
+function getCurrentUser() {
+    const userEmail = "<%-email%>";
+
+    // SERVER_CALL Get information of user profile from server
+   $.get({
+        url:"/patients",
+        data: {email:userEmail},
+        success: function(res) {
+            user_data = res[0];
+        },
+        async: false
+    });
+}
+
+// Function to get assigned doctors of current user
+function getAssignedDoctors() {
+    return user.getDoctors();
+}
+
+// Function to get list of medications user is on
+function getUserMedications() {
+    return user.getMedications();
+}
+
+// Function to get list of user's appointments
+// Will be replaced by user.getAppointments() eventually when server functionality added
+function getUserAppointments() {
+    return user.getAppointments();
+}
+
+function getUserNotifications() {
+    return user.getNotifications();
+}
+
+// Populates the User Profile information
+// Convert to jQuery idk why I wrote this in vanilla JS
+function populate_userInfo() {
+    // User name
+    const nameContainer = document.querySelector("#user-name");
+    nameContainer.setAttribute('class', 'card-subsection-name')
+    const name = document.createTextNode(user.getFName() + " " + user.getLName());
+    const nameElement = document.createElement('h4');
+    nameElement.appendChild(name);
+    nameContainer.appendChild(nameElement);
+
+    // Contact info
+    const contactInfoContainer = document.querySelector('.contact-info');
+    const phoneNumNode = document.createTextNode(user.getPhoneNum());
+    contactInfoContainer.appendChild(phoneNumNode);
+    const emailElement = document.createElement('span');
+    const emailNode = document.createTextNode(user.getEmail());
+    emailElement.setAttribute('class', 'scaling-text-size');
+    emailElement.appendChild(emailNode);
+    contactInfoContainer.appendChild(document.createElement('br'));
+    contactInfoContainer.appendChild(emailElement);
+}
+
+// Populates the "Assigned Doctors" section
+// Convert to jQuery idk why I wrote this in vanilla JS
+function populate_assignedDoctors() {
+    // Will be replaced by user.getAssignedDoctors() eventually when server functionality is added
+    const doctors = getAssignedDoctors();      
+
+    const assignedDoctorSection = document.querySelector('#assigned-doctors');
+
+    for (let i = 0; i < doctors.length; i++) {
+        // Create doctor container element
+        const mainContainer = document.createElement('div');
+        mainContainer.setAttribute('class', 'doctor-container');
+
+        // Create doctor picture element
+        const pictureContainer = document.createElement('div');
+        pictureContainer.setAttribute('class', 'doctor-picture-container');
+        const picture = document.createElement('img');
+        picture.setAttribute('class', 'doctor-picture');
+        picture.setAttribute('src', './resources/images/icons/stockdoctor-icon.png');
+        pictureContainer.append(picture);
+
+        // Create doctor name / specialty element
+        const nameContainer = document.createElement('div');
+        nameContainer.setAttribute('class', 'doctor-name-container card-subsection-notes');
+        const nameNode = document.createTextNode("Dr. " + doctors[i].getFName() + " " + doctors[i].getLName());
+        const nameElement = document.createElement('strong');
+        nameElement.appendChild(nameNode);
+        nameElement.appendChild(document.createElement('br'));
+        const specialtyNode = document.createTextNode(doctors[i].getSpecialty());
+        const specialtyElement = document.createElement('span');
+        specialtyElement.setAttribute('class', 'font-12');
+        specialtyElement.appendChild(specialtyNode);
+        nameContainer.appendChild(nameElement);
+        nameContainer.appendChild(specialtyElement);
+
+        // Add both to doctor container
+        mainContainer.appendChild(pictureContainer);
+        mainContainer.appendChild(nameContainer);
+
+        // Add to assigned doctor section
+        assignedDoctorSection.appendChild(mainContainer);
+    }
+}
+
+// Populate the "Medications" section
+function populate_medications() {
+    // Will be replaced by user.getMedications() eventually when server functionality added
+    const medicationList = getUserMedications();
+
+    for (let i = 0; i < medicationList.length; i++) {
+        $('#med-list').append('<div class="item-container">'+
+                                '<div class="info-container">'+
+                                    '<p class="med-info">'+
+                                        '<span class="card-subsection-name">'+
+                                            medicationList[i]['name']+
+                                        '</span>'+
+                                        '<div class="card-subsection-notes">'+
+                                            medicationList[i]['description']+
+                                        '</div>'+
+                                    '</p>'+
+                                '</div>'+
+                                '<div class="med-reminder-container">'+
+                                    '<div class="btn-group">'+
+                                        '<button class="btn"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">'+
+                                            '<img class="hover-pointer navbar-icon invert-color" src="./resources/images/icons/med-notification-icon.png">'+
+                                        '</button>'+
+                                            '<div class="dropdown-menu dropdown-menu-right">'+
+                                                '<h6 class="dropdown-header">Notification Frequency</h6>'+
+                                                '<div class="dropdown-divider"></div>'+
+                                                '<a onclick="clearNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
+                                                '<div class="dropdown-divider"></div>'+
+                                                '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
+                                                '<div class="dropdown-divider"></div>'+
+                                                '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
+                                                '<div class="dropdown-divider"></div>'+
+                                                '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
+                                            '</div>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>');
+    }
+}
+
+// Populate the "Appointments" section
+function populate_appointments() {
+    const appointmentList = getUserAppointments();
+
+    for (let i = 0; i < appointmentList.length; i++) { 
+        $('#appt-list').append('<div class="item-container">'+
+                                    '<div class="info-container">'+
+                                        '<p class="med-info">'+
+                                            '<span class="card-subsection-name">'+
+                                                appointmentList[i].getName()+
+                                            '</span>'+
+                                            '<div class="card-subsection-h1">'+
+                                                appointmentList[i].getStartTime()+ " - " + appointmentList[i].getEndTime()+
+                                            '</div>'+
+                                            '<div class="card-subsection-h1">'+
+                                                appointmentList[i].getDate()+
+                                            '</div>'+
+                                        '</p>'+
+                                    '</div>'+
+                                    '<div class="med-reminder-container">'+
+                                        '<div class="btn-group">'+
+                                            '<button class="btn"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">'+
+                                                '<img class="hover-pointer navbar-icon invert-color" src="./resources/images/icons/med-notification-icon.png">'+
+                                            '</button>'+
+                                                '<div class="dropdown-menu dropdown-menu-right">'+
+                                                    '<h6 class="dropdown-header">Notification Frequency</h6>'+
+                                                    '<div class="dropdown-divider"></div>'+
+                                                    '<a onclick="clearNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
+                                                    '<div class="dropdown-divider"></div>'+
+                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
+                                                    '<div class="dropdown-divider"></div>'+
+                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
+                                                    '<div class="dropdown-divider"></div>'+
+                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
+                                                '</div>'+
+                                        '</div>'+
+                                    '</div>'+
+                                '</div>')
+    }
+}
+
+function openNotifications() {
+    const notificationList = getUserNotifications();
+
+    // Don't stack notifications
+    $('#notification-dropdown').empty();
+
+    // Set everything else to back
+    $('.card-deck').css("z-index", "-1");
+
+    for (let i = 0; i < notificationList.length; i++) {
+        $('#notification-dropdown').append('<a onclick="removeNotification(\''+user.id+'\','+'\''+i+'\''+')" class="dropdown-item roboto-light" href="#">'+notificationList[i].description+'</a>'+
+                    '<div class="dropdown-divider"></div>')
+    }
+}
+
+// *************** Patient Profile Page ****************
+
+
+$(document).on("click", "#update-med", edit_medications_form);
+$(document).on("click", "#add-med", medication_form);
+$(document).on("click", "#new-med-button", add_medication);
+$(document).on("click", "#cancel-update", cancel_update);
+$(document).on("click", "#delete-med", delete_medication);
+$(document).on("click", "#cancel-new-med", cancel_new_medication);
+
+function edit_medications_form() {
+    const button = $(this)[0].children[0]
+    const textDiv = $($($(this).parent()).parent()[0]).children()[1];
+    if ($(button).text() == "Update Medication") {
+        const original_text = $(textDiv).text();
+        $(textDiv).empty();
+        $(textDiv).append(
+            '<textarea rows="4" cols= "75" type="text" >' +
+            original_text +
+            '</textarea>'
+        );
+        $(button).text("Save and Submit")
+        const next_button = $($(button).parent()[0]).next()[0]
+        $(next_button).removeAttr("delete-med")
+        $(next_button).attr("id", "cancel-update")
+        $($(next_button).children()[0]).text("Cancel")
+    } else if ($(button).text() == "Save and Submit") {
+        const new_text = $($(textDiv).children()[0]).val();
+        const med_container = $($(textDiv).parent()[0]).prev()[0]
+        const med_name = $($(med_container).children()[0]).text();
+        for (let i = 0; i < user.medications.length; i++) {
+            if (user.medications[i]["name"] == med_name) {
+                user.medications[i]["description"] = new_text;
+            }
+        }
+        $(textDiv).empty();
+        $(textDiv).append(new_text);
+        $(button).text("Update Medication")
+        const next_button = $($(button).parent()).next()[0]
+        $(next_button).removeAttr("cancel-update")
+        $(next_button).attr("id", "delete-med")
+        $($(next_button).children()[0]).text("Delete Medication")
+    }
+}
+
+function cancel_update() {
+    console.log(this)
+    const container_to_update = $($(this).parent()[0]).parent()[0];
+    const med_list = user.getMedications();
+    const med_name = $($($(container_to_update).prev()[0]).children()[0]).text();
+    for (let i = 0; i < med_list.length; i++) {
+        if (med_list[i]["name"] == med_name) {
+            const text = med_list[i]["description"]
+            $(container_to_update).empty()
+            $(container_to_update).append(
+                '<span class="med-edit">'+
+                    '<div id="update-med">' + 
+                        '<button type="button" class="btn btn-outline-light">Update Medication</button>' +
+                    '</div>' +
+                    '<div id="delete-med">' + 
+                        '<button type="button" class="btn btn-outline-light">Delete Medication</button>' +
+                    '</div>' +
+                '</span>'
+                );
+            $(container_to_update).append('<div class="med-notes">'+
+                text +
+                '</div>')
+        }
+    }
+}
+
+function medication_form() {
+    if ($(this).text() == "Add Medication") {
+        const med_add = $(this).parent()
+        $(med_add).empty()
+        $(med_add).append(
+        '<div id="new-medication-form">' +
+            '<span class="med-input">' +
+                '<div>Medication name: </div>' +
+                '<textarea rows="1" type="text"></textarea>' +
+            '</span>' +
+            '<span class="med-input">' +
+                '<div>Dosage: </div>' +
+                '<textarea rows="1" type="text"></textarea>' +
+            '</span>' +
+            '<div>Description: </div>' +
+            '<textarea rows="4" cols= "75" type="text" ></textarea>' +
+        '</div>' +
+        '<button type="button" class="btn btn-outline-light" id="new-med-button">Save and Submit</button>' +
+        '<button type="button" class="btn btn-outline-light" id="cancel-new-med">Cancel</button>'
+        );
+    }
+}
+
+function add_medication(){
+    const med_form = $(this).prev()[0].children;
+    user.assignMedication({
+        name: $($(med_form)[0].children[1]).val(),
+        dosage: $($(med_form)[1].children[1]).val(),
+        description: $($(med_form)[3]).val()
+    })
+    populate_assigned_medications();
+}
+
+function delete_medication() {
+    const med_container = $($($(this).parent()[0]).parent()[0]).prev()[0];
+    const med_name = $($(med_container).children()[0]).text()
+    for (let i = 0; i < user.medications.length; i++) {
+        console.log(med_name)
+        console.log(user.medications[i]["name"])
+        if (med_name == user.medications[i]["name"]) {
+            user.medications.splice(i, 1)
+            populate_assigned_medications();
+        }
+    }
+}
+
+function cancel_new_medication() {
+    const med_add = $($(this).parent())[0];
+    $(med_add).empty()
+    $(med_add).append( 
+        '<button type="button" class="btn btn-outline-light" id="add-med">Add Medication</button>' 
+        );
+}
+
+
+function populate_assigned_medications() {
+    $('#assigned-med-list').empty();
+    const medicationList = user.getMedications();
+    
+    for (let i = 0; i < medicationList.length; i++) {
+        $('#assigned-med-list').append(
+            '<div class="med-list-item">'+
+                '<p>'+
+                    '<span class="med-title">'+
+                        medicationList[i]['name']+
+                    '</span>'+
+                    '<img src="./resources/images/icons/expandplus-icon.png" class="expand" data-toggle="collapse" href="#collapseExample' + i + 
+                            '" role="button" aria-expanded="false" aria-controls="collapseExample"/>' +
+                    
+                    '<div class="collapse" id="collapseExample' + i + '">' +
+                        '<span class="med-edit">'+
+                            '<div id="update-med">' + 
+                                '<button type="button" class="btn btn-outline-light">Update Medication</button>' +
+                            '</div>' +
+                            '<div id="delete-med">' + 
+                                '<button type="button" class="btn btn-outline-light">Delete Medication</button>' +
+                            '</div>' +
+                        '</span>'+
+                        '<div class="med-notes">'+
+                            medicationList[i]['description']+
+                        '</div>'+
+                    '</div>' +
+                    
+                '</p>'+
+            '</div>' +
+            '<hr >'
+                );
+    }
+    $('#assigned-med-list').append(
+        '<div class="med-add">'+
+            '<button type="button" class="btn btn-outline-light" id="add-med">Add Medication</button>' +
+        '</div>' 
+        
+    );
+}
+
+</script>
+
