@@ -255,9 +255,9 @@ app.post('/addAssignedDoctor', (req, res) => {
 // GET patient by email
 app.get('/patients', (req, res) => {
     const email = req.query.email // the id is in the req.body object
-    
+    console.log(email);
 	// Otheriwse, find by email
-	Patient.find({ email: email}).then((patient) => {
+	Patient.findOne({ email: email}).then((patient) => {
 		if (!patient) {
 			console.log("Patient not found");
 		} else {
@@ -299,6 +299,26 @@ app.get('/doctors', (req, res) => {
 		res.status(500).send(error)
 	})
 })
+
+app.delete("/removeAssignedPatients", (req, res) => {
+	const email = req.body.email;
+	const doctor = req.body.email;
+
+	// Otheriwse, find by email
+	Doctor.findOne({email: email}).then((doctor) => {
+		if (!doctor) {
+		} else {
+			for (let i = 0; i < doctor.assignedPatients.length; i++) {
+				if (doctor.assignedPatients[i].email == email) {
+					doctor.assignedPatients.splice()
+				}
+			}
+		}
+		
+	}).catch((error) => {
+		res.status(500).send(error)
+	})
+});
 
 app.listen(port, () => {
 	log(`Listening on port ${port}...`)

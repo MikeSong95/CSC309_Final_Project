@@ -164,7 +164,16 @@ class Doctor extends User {
     unassignPatient(patientID) {
         for (let i = 0; i < this.assignedPatients.length; i++) {
             if (this.assignedPatients[i].getID() == patientID) {
-                this.assignedPatients.splice(i, 1);
+                $.post({
+                    url:"/removeAssignedPatients",
+                    data: {
+                        email:assignedPatients[i].email,
+                        doctor: this
+                    },
+                    success: function(res) {
+                    },
+                    async: true
+                });
                 break;
             }
         } 

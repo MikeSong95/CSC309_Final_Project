@@ -13,7 +13,7 @@ $(function() {
     getCurrentUser();
 
     // Create a User object based off of data received from POST
-    user = createPatient(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.gender,user_data.bday,user_data.hcNum);
+    user = createPatient(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.gender,user_data.bday,user_data.hcNum, user_data.appointments, user_data.notifications, user_data.assignedDoctors, user_data.medications);
 
     populate_userInfo();
     populate_assignedDoctors();
@@ -40,7 +40,12 @@ function getCurrentUser() {
         url:"/patients",
         data: {email:userEmail},
         success: function(res) {
-            user_data = res[0];
+            user_data = res;
+
+            // Convert assigned patients array into actual patient objects
+            user_data.assignedDoctors = user_data.assignedDoctors.map(function(user_data) {
+                return createDoctor(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.specialty,user_data.address);
+            });
         },
         async: false
     });
@@ -97,97 +102,58 @@ function populate_assignedDoctors() {
 
     const assignedDoctorSection = document.querySelector('#assigned-doctors');
 
-    for (let i = 0; i < doctors.length; i++) {
-        // Create doctor container element
-        const mainContainer = document.createElement('div');
-        mainContainer.setAttribute('class', 'doctor-container');
+    if (doctors != undefined) {
+        for (let i = 0; i < doctors.length; i++) {
+            // Create doctor container element
+            const mainContainer = document.createElement('div');
+            mainContainer.setAttribute('class', 'doctor-container');
 
-        // Create doctor picture element
-        const pictureContainer = document.createElement('div');
-        pictureContainer.setAttribute('class', 'doctor-picture-container');
-        const picture = document.createElement('img');
-        picture.setAttribute('class', 'doctor-picture');
-        picture.setAttribute('src', './resources/images/icons/stockdoctor-icon.png');
-        pictureContainer.append(picture);
+            // Create doctor picture element
+            const pictureContainer = document.createElement('div');
+            pictureContainer.setAttribute('class', 'doctor-picture-container');
+            const picture = document.createElement('img');
+            picture.setAttribute('class', 'doctor-picture');
+            picture.setAttribute('src', './resources/images/icons/stockdoctor-icon.png');
+            pictureContainer.append(picture);
 
-        // Create doctor name / specialty element
-        const nameContainer = document.createElement('div');
-        nameContainer.setAttribute('class', 'doctor-name-container card-subsection-notes');
-        const nameNode = document.createTextNode("Dr. " + doctors[i].getFName() + " " + doctors[i].getLName());
-        const nameElement = document.createElement('strong');
-        nameElement.appendChild(nameNode);
-        nameElement.appendChild(document.createElement('br'));
-        const specialtyNode = document.createTextNode(doctors[i].getSpecialty());
-        const specialtyElement = document.createElement('span');
-        specialtyElement.setAttribute('class', 'font-12');
-        specialtyElement.appendChild(specialtyNode);
-        nameContainer.appendChild(nameElement);
-        nameContainer.appendChild(specialtyElement);
+            // Create doctor name / specialty element
+            const nameContainer = document.createElement('div');
+            nameContainer.setAttribute('class', 'doctor-name-container card-subsection-notes');
+            const nameNode = document.createTextNode("Dr. " + doctors[i].getFName() + " " + doctors[i].getLName());
+            const nameElement = document.createElement('strong');
+            nameElement.appendChild(nameNode);
+            nameElement.appendChild(document.createElement('br'));
+            const specialtyNode = document.createTextNode(doctors[i].getSpecialty());
+            const specialtyElement = document.createElement('span');
+            specialtyElement.setAttribute('class', 'font-12');
+            specialtyElement.appendChild(specialtyNode);
+            nameContainer.appendChild(nameElement);
+            nameContainer.appendChild(specialtyElement);
 
-        // Add both to doctor container
-        mainContainer.appendChild(pictureContainer);
-        mainContainer.appendChild(nameContainer);
+            // Add both to doctor container
+            mainContainer.appendChild(pictureContainer);
+            mainContainer.appendChild(nameContainer);
 
-        // Add to assigned doctor section
-        assignedDoctorSection.appendChild(mainContainer);
+            // Add to assigned doctor section
+            assignedDoctorSection.appendChild(mainContainer);
+        }
     }
 }
 
 // Populate the "Medications" section
 function populate_medications() {
-    // Will be replaced by user.getMedications() eventually when server functionality added
     const medicationList = getUserMedications();
 
-    for (let i = 0; i < medicationList.length; i++) {
-        $('#med-list').append('<div class="item-container">'+
-                                '<div class="info-container">'+
-                                    '<p class="med-info">'+
-                                        '<span class="card-subsection-name">'+
-                                            medicationList[i]['name']+
-                                        '</span>'+
-                                        '<div class="card-subsection-notes">'+
-                                            medicationList[i]['description']+
-                                        '</div>'+
-                                    '</p>'+
-                                '</div>'+
-                                '<div class="med-reminder-container">'+
-                                    '<div class="btn-group">'+
-                                        '<button class="btn"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">'+
-                                            '<img class="hover-pointer navbar-icon invert-color" src="./resources/images/icons/med-notification-icon.png">'+
-                                        '</button>'+
-                                            '<div class="dropdown-menu dropdown-menu-right">'+
-                                                '<h6 class="dropdown-header">Notification Frequency</h6>'+
-                                                '<div class="dropdown-divider"></div>'+
-                                                '<a onclick="clearNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
-                                                '<div class="dropdown-divider"></div>'+
-                                                '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
-                                                '<div class="dropdown-divider"></div>'+
-                                                '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
-                                                '<div class="dropdown-divider"></div>'+
-                                                '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
-                                            '</div>'+
-                                    '</div>'+
-                                '</div>'+
-                            '</div>');
-    }
-}
-
-// Populate the "Appointments" section
-function populate_appointments() {
-    const appointmentList = getUserAppointments();
-
-    for (let i = 0; i < appointmentList.length; i++) { 
-        $('#appt-list').append('<div class="item-container">'+
+    if (medicationList != undefined) {
+        for (let i = 0; i < medicationList.length; i++) {
+            $('#med-list').append('<div class="item-container">'+
                                     '<div class="info-container">'+
                                         '<p class="med-info">'+
                                             '<span class="card-subsection-name">'+
-                                                appointmentList[i].getName()+
+                                                medicationList[i]['name']+
                                             '</span>'+
-                                            '<div class="card-subsection-h1">'+
-                                                appointmentList[i].getStartTime()+ " - " + appointmentList[i].getEndTime()+
-                                            '</div>'+
-                                            '<div class="card-subsection-h1">'+
-                                                appointmentList[i].getDate()+
+                                            '<div class="card-subsection-notes">'+
+                                                medicationList[i]['description']+
                                             '</div>'+
                                         '</p>'+
                                     '</div>'+
@@ -199,17 +165,62 @@ function populate_appointments() {
                                                 '<div class="dropdown-menu dropdown-menu-right">'+
                                                     '<h6 class="dropdown-header">Notification Frequency</h6>'+
                                                     '<div class="dropdown-divider"></div>'+
-                                                    '<a onclick="clearNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
+                                                    '<a onclick="clearNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
                                                     '<div class="dropdown-divider"></div>'+
-                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
+                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
                                                     '<div class="dropdown-divider"></div>'+
-                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
+                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
                                                     '<div class="dropdown-divider"></div>'+
-                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
+                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
                                                 '</div>'+
                                         '</div>'+
                                     '</div>'+
-                                '</div>')
+                                '</div>');
+        }
+    }
+}
+
+// Populate the "Appointments" section
+function populate_appointments() {
+    const appointmentList = getUserAppointments();
+    
+    if (appointmentList != undefined) {
+
+        for (let i = 0; i < appointmentList.length; i++) { 
+            $('#appt-list').append('<div class="item-container">'+
+                                        '<div class="info-container">'+
+                                            '<p class="med-info">'+
+                                                '<span class="card-subsection-name">'+
+                                                    appointmentList[i].getName()+
+                                                '</span>'+
+                                                '<div class="card-subsection-h1">'+
+                                                    appointmentList[i].getStartTime()+ " - " + appointmentList[i].getEndTime()+
+                                                '</div>'+
+                                                '<div class="card-subsection-h1">'+
+                                                    appointmentList[i].getDate()+
+                                                '</div>'+
+                                            '</p>'+
+                                        '</div>'+
+                                        '<div class="med-reminder-container">'+
+                                            '<div class="btn-group">'+
+                                                '<button class="btn"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">'+
+                                                    '<img class="hover-pointer navbar-icon invert-color" src="./resources/images/icons/med-notification-icon.png">'+
+                                                '</button>'+
+                                                    '<div class="dropdown-menu dropdown-menu-right">'+
+                                                        '<h6 class="dropdown-header">Notification Frequency</h6>'+
+                                                        '<div class="dropdown-divider"></div>'+
+                                                        '<a onclick="clearNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
+                                                        '<div class="dropdown-divider"></div>'+
+                                                        '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
+                                                        '<div class="dropdown-divider"></div>'+
+                                                        '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
+                                                        '<div class="dropdown-divider"></div>'+
+                                                        '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
+                                                    '</div>'+
+                                            '</div>'+
+                                        '</div>'+
+                                    '</div>')
+        }   
     }
 }
 
@@ -357,7 +368,8 @@ function cancel_new_medication() {
 function populate_assigned_medications() {
     $('#assigned-med-list').empty();
     const medicationList = user.getMedications();
-    
+    if (medicationList != undefined) {
+
     for (let i = 0; i < medicationList.length; i++) {
         $('#assigned-med-list').append(
             '<div class="med-list-item">'+
@@ -387,6 +399,8 @@ function populate_assigned_medications() {
             '<hr >'
                 );
     }
+            
+}
     $('#assigned-med-list').append(
         '<div class="med-add">'+
             '<button type="button" class="btn btn-outline-light" id="add-med">Add Medication</button>' +

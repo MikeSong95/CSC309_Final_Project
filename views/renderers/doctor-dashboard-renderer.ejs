@@ -54,7 +54,7 @@ function getCurrentUser() {
 
             // Convert assigned patients array into actual patient objects
             user_data.assignedPatients = user_data.assignedPatients.map(function(user_data) {
-                return createPatient(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.gender,user_data.bday,user_data.hcNum, user_data.appointments_, user_data.notifications_, user_data.assignedDoctors_, user_data.medications_);
+                return createPatient(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.gender,user_data.bday,user_data.hcNum, user_data.appointments, user_data.notifications, user_data.assignedDoctors, user_data.medications);
             });
         },
         async: false
@@ -142,7 +142,7 @@ function populate_patients() {
 
     for (let i = 0; i < patients.length; i++) {
         $("#patients").append('<div class="patient-container">'+
-                                        '<a class="nav-link"  href="patient-profile?email='+user.getEmail()+'">'+
+                                        '<a class="nav-link"  href="patient-profile?email='+patients[i].getEmail()+'">'+
                                             '<div class="patient-picture-container">'+
                                                 '<img class="patient-picture" src="./resources/images/mark.jpeg">' +
                                             '</div>'+
@@ -180,7 +180,7 @@ function displaySearchResults(arr) {
 
     for (let i = 0; i < arr.length; i++) {
         $("#patients").append('<div class="patient-container">'+
-                                        '<a class="nav-link" href="patient-profile?email='+user.getEmail()+'" >'+
+                                        '<a class="nav-link" href="patient-profile?email='+patients[i].getEmail()+'" >'+
                                             '<div class="patient-picture-container">'+
                                                 '<img class="patient-picture" src="./resources/images/mark.jpeg">' +
                                             '</div>'+
@@ -197,13 +197,23 @@ function displaySearchResults(arr) {
     }
 }
 
+function userInList (user, list) {
+    for (let i = 0; i < list.length; i++) {
+        if (user.getEmail() == list[i].getEmail()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 function populate_modal() {
     const assignedPatients = getUserPatients();
     console.log(assignedPatients);
     console.log(patientList[0]);
     $("#add-patient").empty();
     for (let i = 0; i < patientList.length; i++) {
-        if (assignedPatients.includes(patientList[i]) === false) {
+        if (!userInList(patientList[i], assignedPatients)) {
             $("#add-patient").append('<div class="modal-patient-container">'+
                                                 '<div class="patient-picture-container">'+
                                                     '<img class="invert-color patient-picture" src="./resources/images/icons/stockprofile-icon.png">'+
