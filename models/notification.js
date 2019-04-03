@@ -1,10 +1,18 @@
-const mongoose = require('mongoose');
+/* Notification  model */
+const mongoose = require('mongoose')
 
-// Reservations will be embedded in the Restaurant model
 const NotificationSchema = new mongoose.Schema({
-    id_: Number,
+	description: {
+		type: String,
+		required: true,
+		minlength: 1
+	},
+	alertFreq: {
+		type: Number,
+		default: 5000
+	}
 });
 
-const Notification = mongoose.model('Notification', NotificationSchema);
+const Notification = mongoose.model("Notification", NotificationSchema);
 
-module.exports = Notification ;
+module.exports = { Notification };
