@@ -15,10 +15,10 @@ const PatientSchema = new mongoose.Schema({
     gender: String,
     bday: String,
     hcNum: Number,
-    notifications: [NotificationModel.schema],
-    appointments: [AppointmentModel.schema],    // Empty list of appointment IDs
+    notifications: [Object],
+    appointments: [Object],    // Empty list of appointment IDs
     assignedDoctors: [Object], // Empty list of assigned doctors
-    medications: [MedicationModel.schema]     // Empty list of assigned medications
+    medications: [Object]     // Empty list of assigned medications
 });
 
 // Our own student finding function 

@@ -13,8 +13,8 @@ const DoctorSchema = new mongoose.Schema({
     lName:String,
     specialty: String,
     address: String,
-    notifications: [NotificationModel.schema],
-    appointments: [AppointmentModel.schema],    // Empty list of appointment IDs
+    notifications: [Object],
+    appointments: [Object],    // Empty list of appointment IDs
     assignedPatients: [Object] // Empty list of assigned doctors
 });
 
