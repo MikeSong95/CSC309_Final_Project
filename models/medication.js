@@ -9,3 +9,7 @@ const MedicationSchema = new mongoose.Schema({
 	dosage: String,
 	description: String
 });
+
+const Medication = mongoose.model("Medication", MedicationSchema);
+
+module.exports = { Medication };

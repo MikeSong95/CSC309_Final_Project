@@ -11,7 +11,7 @@ const DoctorSchema = new mongoose.Schema({
         },
         specialty: String,
 	notifications: [Notification.schema],
-        assignedPatients: [Patientss.schema],
+        assignedPatients: [Patient.schema],
         appointments: [Appointment.schema],
 });	
         
