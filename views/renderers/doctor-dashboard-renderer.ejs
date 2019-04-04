@@ -240,7 +240,7 @@ function populate_modal() {
     const assignedPatients = getUserPatients();
 
     $("#add-patient").empty();
-    for (let i = 0; i < assignedPatients.length; i++) {
+    for (let i = 0; i < patientList.length; i++) {
         if (!userInList(patientList[i], assignedPatients)) {
             $("#add-patient").append('<div class="modal-patient-container">'+
                                                 '<div class="patient-picture-container">'+
