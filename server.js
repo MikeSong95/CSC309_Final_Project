@@ -264,7 +264,7 @@ app.post('/addAssignedDoctor', (req, res) => {
 // GET patient by email
 app.get('/patients', (req, res) => {
     const email = req.query.email // the id is in the req.body object
-    console.log(email);
+
 	// Otheriwse, find by email
 	Patient.findOne({ email: email}).then((patient) => {
 		if (!patient) {

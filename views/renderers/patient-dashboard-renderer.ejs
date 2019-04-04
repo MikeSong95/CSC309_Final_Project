@@ -46,6 +46,11 @@ function getCurrentUser() {
             user_data.assignedDoctors = user_data.assignedDoctors.map(function(user_data) {
                 return createDoctor(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.specialty,user_data.address);
             });
+
+             // Convert appointment array into actual patient objects
+             user_data.appointments = user_data.appointments.map(function(user_data) {
+                return createDoctor(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.specialty,user_data.address);
+            });
         },
         async: false
     });
