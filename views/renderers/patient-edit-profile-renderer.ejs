@@ -1,14 +1,13 @@
 <script>
 
-const submitForm = document.querySelector('#submitButton');
+const submitForm = document.querySelector('#submit_btn');
 
 submitForm.addEventListener('click', submitClicked);
-
 function submitClicked(e){
     e.preventDefault();
     
     $.post({
-        url: "/editPatientProfile"
+        url: "/edit-patient"
     })
 }
 
