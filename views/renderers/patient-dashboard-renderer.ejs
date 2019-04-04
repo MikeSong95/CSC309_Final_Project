@@ -475,6 +475,7 @@ function populate_assigned_medications() {
                     '<span class="med-title">'+
                         medicationList[i]['name']+
                     '</span>'+
+                    
                     '<img src="./resources/images/icons/expandplus-icon.png" class="expand" data-toggle="collapse" href="#collapseExample' + i + 
                             '" role="button" aria-expanded="false" aria-controls="collapseExample"/>' +
                     
@@ -490,6 +491,11 @@ function populate_assigned_medications() {
                         '<div class="med-notes">'+
                             medicationList[i]['description']+
                         '</div>'+
+                        " (" +
+                    '<span class="med-title">'+
+                        medicationList[i]['dosage']+
+                    '</span>'+
+                    ")" +
                     '</div>' +
                     
                 '</p>'+
