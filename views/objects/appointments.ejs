@@ -102,4 +102,9 @@ class Appointment {
     }
 }
 
+function createAppointment(name, start, end, patient, doctor) {
+    const newAppointment = new Appointment(name, start, end, patient, doctor);
+    return newAppointment;
+}
+
 </script>
