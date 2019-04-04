@@ -58,16 +58,12 @@ class Appointment {
      * @param {dateTime} end_ 
      * @param {Patient or Doctor} with_ The person whom the meeting is with 
      */
-    constructor (id_, name_, start_, end_, with_) {
-        this.id = id_;
+    constructor (name_, start_, end_, patient_, doctor_) {
         this.name = name_;
         this.start = start_;    // Start dateTime object
         this.end = end_;        // End dateTime object
-        this.with = with_;
-    }
-    
-    getID () {
-        return this.id;
+        this.patient = patient_;
+        this.doctor = doctor_;
     }
     
     getName () {
@@ -97,9 +93,26 @@ class Appointment {
         return date;
     }
 
-    getWith() {
-        return this.with;
+    getPatient() {
+        return this.patient;
     }
+
+    getDoctor() {
+        return this.doctor;
+    }
+}
+
+function createDateTime(time) {
+    const newDateTime = new dateTime (time.year, time.month, time.date, time.time);
+    return newDateTime;
+}
+
+function createAppointment(name, start, end, patient, doctor) {
+    const start_dateTime = createDateTime(start);
+    const end_dateTime = createDateTime(end);
+
+    const newAppointment = new Appointment(name, start_dateTime, end_dateTime, patient, doctor);
+    return newAppointment;
 }
 
 </script>

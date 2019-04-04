@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Index CSS -->
+    <link rel="stylesheet" type="text/css" href="./css/patient-dashboard.css">
+    <link rel="stylesheet" type="text/css" href="./css/patient-profile.css">
+</head>
+
+<body>
+    <div id="background">
+        <img src="./resources/images/bg.jpg" class="stretch" alt="" />
+    </div>
+    <!-- Dashboard Navbar -->
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">
+            <img class="navbar-logo" src="./resources/images/icons/logo-icon.png" width="40" height="40" alt="">
+        </a>
+        <ul class="d-flex justify-content-end align-items-center nav-icon">
+            <li class="nav-item">
+                <div class="btn-group">
+                    <button class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">
+                        <img id="navbar-notif-icon" class="navbar-icon invert-color"
+                            src="./resources/images/icons/notification-none-icon.png">
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <!-- Populate with notification information -->
+                        <a class="dropdown-item roboto-light" href="#">These will be the notifications</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item roboto-light" href="#">This will be another notification</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <img class="navbar-icon" src="./resources/images/icons/calendar-icon.png">
+                </a>
+            </li>
+            <li class="nav-item">
+                <div class="btn-group">
+                    <button class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">
+                        <img class="navbar-icon" src="./resources/images/icons/stockprofile-icon.png">
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item roboto-light" href="#">Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item roboto-light" href="logout">Log Out</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <div id="dashboard">
+        <div class="container d-flex justify-content-around align-items-center">
+            <div class="card-deck">
+                <div id="profile-card" class="card">
+                    <img src="./resources/images/mark.jpeg" class="profile-picture" alt="">
+                    <div class="card-body">
+                        <br>
+                        <div id="user-name" class="center-text">
+
+                        </div>
+                        <hr>
+                        <p>Assigned Doctors</p>
+                        <div id="assigned-doctors">
+                        </div>
+                        <hr>
+                        <p>Contact Info</p>
+                        <div class="contact-info center-text ">
+
+                        </div>
+                    </div>
+                </div>
+                <!-- main board -->
+                <div id="main-profile-card" class="card">
+                    <div id="button-header">
+                        <span class="back">
+                            <form action="/doctor-dashboard" method="GET">
+                                <button type="submit" class="btn btn-secondary btn-sm">Back</button>
+                            </form>
+                            <!-- <button type="button" class="btn btn-secondary btn-sm">Back</button> -->
+                        </span>
+                        <div class="appts">
+                            <div id=appt-title>Upcoming Appointments</div>
+                            <div id="appt-list" class="appointment-button"></div>
+                        </div>
+                        
+                    </div>
+                    <hr>
+                    <div id="profile-body">
+                        <h4>Current Medications</h4>
+                        <div class="med-container">
+                            <div id="assigned-med-list"></div>
+                        </div>
+                    </div>
+                </div>
+            
+                <form action="/book-appointment" method="post" id="book" class="card">
+                    <div>
+                        <input type="hidden" name="email" value="<%-email%>">
+                    </div>
+                    <div class="form-group" class="book_input">
+                        <label for="exampleFormControlInput1">Appointment:</label>
+                        <input name="appt_type" type="text" class="form-control" id="exampleFormControlInput1"
+                            placeholder="Appointment Type">
+                    </div>
+                    <div class="form-group" class="book_input">
+                        <label for="exampleFormControlInput1">Start time:</label>
+                        <input name="start_t" type="text" class="form-control" id="exampleFormControlInput1"
+                            placeholder="Start time">
+                    </div>
+                    <div class="form-group" class="book_input">
+                        <label for="exampleFormControlInput1">End time:</label>
+                        <input name="end_t" type="text" class="form-control" id="exampleFormControlInput1"
+                            placeholder="End time">
+                    </div>
+                    <div class="form-group" class="book_input">
+                        <label for="exampleFormControlSelect1">Month:</label>
+                        <select name="month" class="form-control" id="exampleFormControlSelect1">
+                            <option>Jan</option>
+                            <option>Feb</option>
+                            <option>Mar</option>
+                            <option>Apr</option>
+                            <option>May</option>
+                            <option>Jun</option>
+                            <option>Jul</option>
+                            <option>Aug</option>
+                            <option>Sep</option>
+                            <option>Oct</option>
+                            <option>Nov</option>
+                            <option>Dec</option>
+                        </select>
+                    </div>
+                    <div class="form-group" class="book_input">
+                        <label for="exampleFormControlSelect1">Day:</label>
+                        <select name="day" class="form-control" id="exampleFormControlSelect1">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                            <option>11</option>
+                            <option>12</option>
+                            <option>13</option>
+                            <option>14</option>
+                            <option>15</option>
+                            <option>16</option>
+                            <option>17</option>
+                            <option>18</option>
+                            <option>19</option>
+                            <option>20</option>
+                            <option>21</option>
+                            <option>22</option>
+                            <option>23</option>
+                            <option>24</option>
+                            <option>25</option>
+                            <option>26</option>
+                            <option>27</option>
+                            <option>28</option>
+                            <option>29</option>
+                            <option>30</option>
+                            <option>31</option>
+                        </select>
+                    </div>
+                    <div class="form-group" class="book_input">
+                        <label for="exampleFormControlInput1">Year:</label>
+                        <input name="year" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Year">
+                    </div>
+                    <input class="btn btn-secondary btn-sm" type="submit" value="Book Appointment"/>
+
+
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  
+    <% include ./objects/users %> 
+    <% include ./objects/medications %> 
+    <% include ./objects/appointments %> 
+    <% include ./objects/notifications %> 
+    <% include ./renderers/patient-dashboard-renderer %> 
+</body>

@@ -43,48 +43,55 @@
             <!-- User info edit -->
             <div class="col-md-9">
               <h4>Edit Profile</h4>
-              
-              <form class="form-horizontal" role="form">
+              <h5 class="alert alert-primary">Fill in fields you would like to edit and click Submit</h5>
+              <form id="create-patient-form" class="form-horizontal" action="/edit-patient" method="POST" role="form">
                 <div class="form-group">
-                  <label class="col-lg-3">First Name:</label>
+                  <label class="col-lg-3" for="fname">First Name:</label>
                   <div class="col-lg-8">
-                    <input class="form-control" type="text" value="Mark" readonly>
+                    <input id="fname" name="fname" class="form-control" type="text">
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-lg-3">Last name:</label>
+                  <label class="col-lg-3" for="lname">Last name:</label>
                   <div class="col-lg-8">
-                    <input class="form-control" type="text" value="Kazakevich" readonly>
+                    <input id="lname"  name="lname" class="form-control" type="text">
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-lg-3">Email:</label>
+                  <label class="col-lg-3" for="email">Email:</label>
                   <div class="col-lg-8">
-                    <input class="form-control" type="text" value="useremail@gmail.com">
+                    <input id="email" name="email" class="form-control" type="text">
                   </div>
                 </div>
                 <div class="form-group">
-                    <label class="col-lg-3">Phone:</label>
+                    <label class="col-lg-3" for="phone">Phone:</label>
                     <div class="col-lg-8">
-                      <input class="form-control" type="text" value="647 123 4567">
+                      <input id="phone"  name="phone"class="form-control" type="text">
                     </div>
-                </div>
-                <div class="form-group">
-                  <label class="col-md-3">Password:</label>
-                  <div class="col-md-8">
-                    <input class="form-control" type="password" value="user">
                   </div>
-                </div>
+                  <div class="form-group">
+                        <label class="col-md-3" for="gender">Gender:</label>
+                        <div class="col-md-8">
+                          <input id="gender" name="gender" class="form-control" type="text">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                           <label class="col-md-3" for="hcnum">Health Card Number:</label>
+                           <div class="col-md-8">
+                             <input id="hcnum" name="hcnum" class="form-control" type="text">
+                           </div>
+                         </div>
                 <div class="form-group">
-                  <label class="col-md-3">Confirm password:</label>
+                  <label class="col-md-3" for="password">Password:</label>
                   <div class="col-md-8">
-                    <input class="form-control" type="password" value="user">
+                    <input id="password"  name="password"class="form-control" type="password">
                   </div>
                 </div>
                 <div class="form-group">
                   <label class="col-md-3"></label>
                   <div class="col-md-8">
-                    <input type="button" id="submitButton" class="btn btn-primary" value="Save">
+                     
+                        <input id="submit_btn" type="submit" class="btn btn-primary" value="Submit">
                   </div>
                 </div>
               </form>
