@@ -175,7 +175,7 @@ app.post("/create-doctor", (req, res) => {
         address: req.body.address,
         notifications: [],
         appointments: [],    // Empty list of appointment IDs
-        assignedPatients: [], // Empty list of assigned patients
+        assignedPatients: [] // Empty list of assigned patients
     });
 
     // Set session info
@@ -208,7 +208,6 @@ app.post('/addAssignedPatient', (req, res) => {
 		} else {
 			// Push reservation onto restaurant array
 			doctor.assignedPatients.push(patient);
-			console.log(doctor);
 			// Mark it as modified
 			doctor.markModified('assignedPatients');
 			// Save it
@@ -237,7 +236,6 @@ app.post('/addAssignedDoctor', (req, res) => {
 		} else {
 			// Push reservation onto restaurant array
 			patient.assignedDoctors.push(doctor);
-			console.log(patient);
 			// Mark it as modified
 			patient.markModified('assignedDoctors');
 			// Save it
@@ -261,7 +259,6 @@ app.get('/patients', (req, res) => {
 		if (!patient) {
 			console.log("Patient not found");
 		} else {
-			console.log(patient);
 			res.send(patient)
 		}
 		
@@ -300,24 +297,53 @@ app.get('/doctors', (req, res) => {
 	})
 })
 
-app.delete("/removeAssignedPatients", (req, res) => {
-	const email = req.body.email;
-	const doctor = req.body.email;
+app.delete("/removeAssignedPatient", (req, res) => {
+	const patient_email = req.body.patient_email;	// email of the patient to remove
+	const doctor_email = req.body.doctor_email;		// doctor to remove patient from
 
-	// Otheriwse, find by email
-	Doctor.findOne({email: email}).then((doctor) => {
-		if (!doctor) {
+	// Find patient to remove doctor from
+	Patient.findOne({email: patient_email}).then((patient) => {
+		if (!patient) {
+
 		} else {
-			for (let i = 0; i < doctor.assignedPatients.length; i++) {
-				if (doctor.assignedPatients[i].email == email) {
-					doctor.assignedPatients.splice()
+			for (let i = 0; i < patient.assignedDoctors.length; i++) {
+				if (patient.assignedDoctors[i].email == doctor_email) {
+					patient.assignedDoctors.splice(i, 1);
+
+					// Mark it as modified
+					patient.markModified('assignedDoctors');
+					// Save it
+					patient.save();
 				}
 			}
 		}
-		
 	}).catch((error) => {
 		res.status(500).send(error)
-	})
+	});
+
+	// Find doctor to remove patient from
+	Doctor.findOne({email: doctor_email}).then((doctor) => {
+		if (!doctor) {
+		} else {
+			for (let i = 0; i < doctor.assignedPatients.length; i++) {
+				if (doctor.assignedPatients[i].email == patient_email) {
+					doctor.assignedPatients.splice(i, 1);
+
+					// Mark it as modified
+					doctor.markModified('assignedPatients');
+
+					// Save it
+					doctor.save().then(() => {
+						res.send('Success')
+					}, (error) => {
+						res.status(400).send(error) // 400 for bad request
+					})
+				}
+			}
+		}
+	}).catch((error) => {
+		res.status(500).send(error)
+	});
 });
 
 app.listen(port, () => {

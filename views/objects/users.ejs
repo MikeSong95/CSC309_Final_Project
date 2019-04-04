@@ -162,21 +162,24 @@ class Doctor extends User {
     }
 
     unassignPatient(patientID) {
+        console.log(this.assignedPatients);
         for (let i = 0; i < this.assignedPatients.length; i++) {
-            if (this.assignedPatients[i].getID() == patientID) {
-                $.post({
-                    url:"/removeAssignedPatients",
+            if (this.assignedPatients[i].getEmail() == patientID) {
+                $.ajax({
+                    type: 'DELETE',
+                    url:"/removeAssignedPatient",
                     data: {
-                        email:assignedPatients[i].email,
-                        doctor: this
+                        patient_email: this.assignedPatients[i].getEmail(),
+                        doctor_email: this.getEmail()
                     },
                     success: function(res) {
+                        location.reload();
                     },
                     async: true
                 });
                 break;
             }
-        } 
+        }
     }
 
     /**
