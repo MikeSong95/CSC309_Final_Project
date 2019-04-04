@@ -12,6 +12,7 @@ const { mongoose } = require('./db/mongoose');
 // Models
 const { Patient } = require('./models/patient');
 const { Doctor } = require('./models/doctor');
+const { Admin } = require('./models/admin');
 
 // Express
 const port = process.env.PORT || 3000
@@ -29,6 +30,9 @@ app.set('view engine', 'ejs');
 
 // Service static files
 app.set('views', path.join(__dirname, 'views'));
+
+// static font directory
+app.use("/resources/fonts/", express.static(__dirname + '/public/resources/fonts/'))
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -71,6 +75,26 @@ app.get('/logout', (req, res) => {
 		}
 	})
 })
+
+// Route to admin dashboard
+app.get("/admin-dashboard", (req, res) => {
+	// Route can handle email via query or body
+	let email;
+	if (req.body.email == undefined) {
+		email = req.session.email
+	} else {
+		email = req.body.email
+	}
+
+	// check if we have active session cookie
+	if (req.session.user) {
+		res.render('admin-dashboard', {
+			email: email
+		});
+	} else {
+		res.redirect('/')
+	}
+});
 
 // Route to patient dashboard
 app.get("/patient-dashboard", (req,res) => {
@@ -194,7 +218,6 @@ app.post("/edit-patient", (req, res) => {
 })
 
 /* GET Requests */
-
 // Login
 app.get("/login", (req,res) => {
     const email = req.query.email;
@@ -212,8 +235,15 @@ app.get("/login", (req,res) => {
 			req.session.email = doctor.email;
 			res.redirect("/doctor-dashboard");
 		}).catch((error) => {
-			// User not found or credentials incorrect
-			res.render("index",{error: true});
+			// Try finding admin
+			Admin.findByEmailPassword(email, password).then((admin) => {
+				req.session.user = admin._id;
+				req.session.email = admin.email;
+				res.redirect("/admin-dashboard");
+			}).catch((error) => {
+				// User not found or credentials incorrect
+				res.render("index",{error: true});
+			});
 		});
 	});
 });
@@ -366,6 +396,34 @@ app.get('/allPatients', (req, res) => {
 		if (!patient) {
 		} else {
 			res.send(patient)
+		}
+		
+	}).catch((error) => {
+		res.status(500).send(error)
+	})
+})
+
+// GET all patients
+app.get('/allDoctors', (req, res) => {
+	// Otheriwse, find by email
+	Doctor.find({}).then((doctor) => {
+		if (!doctor) {
+		} else {
+			res.send(doctor)
+		}
+		
+	}).catch((error) => {
+		res.status(500).send(error)
+	})
+})
+
+// GET all admins
+app.get('/allAdmins', (req, res) => {
+	// Otheriwse, find by email
+	Admin.find({}).then((admin) => {
+		if (!admin) {
+		} else {
+			res.send(admin)
 		}
 		
 	}).catch((error) => {
@@ -603,7 +661,23 @@ app.delete("/delete-medication", (req, res) => {
 
 // back button to /doctor-dashboard
 
-
+// Middleware for authentication for resources
+const authenticate = (req, res, next) => {
+        if (req.session.user) {
+                User.findById(req.session.user).then((user) => {
+                        if (!user) {
+                                return Promise.reject()
+                        } else {
+                                req.user = user
+                                next()
+                        }   
+                }).catch((error) => {
+                        res.redirect('/login')
+                })
+        } else {
+                res.redirect('/login')
+        }
+}
 
 app.listen(port, () => {
 	log(`Listening on port ${port}...`)
