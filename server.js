@@ -507,7 +507,7 @@ app.post("/book-appointment", (req, res) => {
 	// Find patient to remove doctor from
 	Patient.findOne({email: patient_email}).then((patient) => {
 		if (!patient) {
-
+			res.status(404).send("Not valid patient email")
 		} else {
 			patient.appointments.push(appointment);
 			patient.markModified("appointments")
@@ -520,7 +520,7 @@ app.post("/book-appointment", (req, res) => {
 	// Find patient to remove doctor from
 	Doctor.findOne({email: doctor_email}).then((doctor) => {
 		if (!doctor) {
-
+				res.status(404).send("Not valid doctor email")
 		} else {
 			doctor.appointments.push(appointment);
 			doctor.markModified("appointments")
