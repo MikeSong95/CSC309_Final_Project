@@ -545,29 +545,25 @@ app.patch("/update-medication", (req, res) => {
 	// 	patient.save()
 
 	// })
-	Patient.findOne({"email": email})
-	.then((patient)=> {
+	Patient.findOne({"email": email}).then((patient)=> {
 		if (!patient) {
 			res.status(404).send("Patient does not exist")
 		}
-		console.log(patient.medications)
-		patient.medications.forEach(med => {
-			console.log(med)
-			
+		patient.medications.forEach(med => {			
 			if (med.name == medication) {
 				med.description = description
-				console.log(med.name)
-				console.log(med.description)
 			}
 		});
+		patient.markModified("medications");
 		patient.save().then((result) => {
-			res.redirect("/patient-profile?email=" + email);
+			res.send("Success");
 		},(error) => {
 			res.status(400).send()
-		})
-		.catch((error) => {
+		}).catch((error) => {
 			res.status(500).send(error)
 		})
+	}).catch((error) => {
+		res.status(500).send(error)
 	})
 })
 
@@ -591,7 +587,7 @@ app.delete("/delete-medication", (req, res) => {
 		}
 		patient.medications.splice(index_to_remove, 1);
 		patient.save().then((result) => {
-			res.redirect("/patient-profile?email=" + email);
+			res.send("Success");
 		},(error) => {
 			res.status(400).send()
 		})

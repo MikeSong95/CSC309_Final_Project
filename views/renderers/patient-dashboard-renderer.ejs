@@ -170,13 +170,13 @@ function populate_medications() {
                                                 '<div class="dropdown-menu dropdown-menu-right">'+
                                                     '<h6 class="dropdown-header">Notification Frequency</h6>'+
                                                     '<div class="dropdown-divider"></div>'+
-                                                    '<a onclick="clearNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
+                                                    '<a onclick="clearNotification(\''+user.email+'\','+'\''+medicationList[i].name+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
                                                     '<div class="dropdown-divider"></div>'+
-                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
+                                                    '<a onclick="createNotification(\''+user.email+'\','+'\''+medicationList[i].name+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
                                                     '<div class="dropdown-divider"></div>'+
-                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
+                                                    '<a onclick="createNotification(\''+user.email+'\','+'\''+medicationList[i].name+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
                                                     '<div class="dropdown-divider"></div>'+
-                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
+                                                    '<a onclick="createNotification(\''+user.email+'\','+'\''+medicationList[i].name+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
                                                 '</div>'+
                                         '</div>'+
                                     '</div>'+
@@ -199,6 +199,9 @@ function populate_appointments() {
                                                     appointmentList[i].getName()+
                                                 '</span>'+
                                                 '<div class="card-subsection-h1">'+
+                                                appointmentList[i].getDoctor()+
+                                            '   </div>'+
+                                                '<div class="card-subsection-h1">'+
                                                     appointmentList[i].getStartTime()+ " - " + appointmentList[i].getEndTime()+
                                                 '</div>'+
                                                 '<div class="card-subsection-h1">'+
@@ -211,18 +214,22 @@ function populate_appointments() {
                                                 '<button class="btn"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">'+
                                                     '<img class="hover-pointer navbar-icon invert-color" src="./resources/images/icons/med-notification-icon.png">'+
                                                 '</button>'+
+                                                
                                                     '<div class="dropdown-menu dropdown-menu-right">'+
                                                         '<h6 class="dropdown-header">Notification Frequency</h6>'+
                                                         '<div class="dropdown-divider"></div>'+
-                                                        '<a onclick="clearNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
+                                                        '<a onclick="clearNotification(\''+user.email+'\','+'\''+appointmentList[i].getName()+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
                                                         '<div class="dropdown-divider"></div>'+
-                                                        '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
+                                                        '<a onclick="createNotification(\''+user.email+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
                                                         '<div class="dropdown-divider"></div>'+
-                                                        '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
+                                                        '<a onclick="createNotification(\''+user.email+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
                                                         '<div class="dropdown-divider"></div>'+
-                                                        '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
+                                                        '<a onclick="createNotification(\''+user.email+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
                                                     '</div>'+
                                             '</div>'+
+                                            '<button class="btn" aria-haspopup="true" aria-expanded="false" type="button">'+
+                                                '<img class="hover-pointer navbar-icon" src="./resources/images/icons/delete-icon.png">'+
+                                            '</button>'+
                                         '</div>'+
                                     '</div>')
         }   
@@ -284,7 +291,7 @@ function edit_medications_form() {
                 }
                 const url = "/update-medication"
                 const request = new Request(url, {
-                    method: 'patch', 
+                    method: 'PATCH', 
                     body: JSON.stringify(data), // json input to string
                     headers: {
                         'Accept': 'application/json, text/plain, */*', //client tell server the content types they accept
@@ -297,6 +304,8 @@ function edit_medications_form() {
                     console.log('Status Code: ' +
                         response.status);
                     return;
+                    } else {
+                        location.reload();
                     }
                 })
                 .then(function() {
@@ -431,6 +440,8 @@ function delete_medication() {
                     console.log('Status Code: ' +
                         response.status);
                     return;
+                    } else {
+                        location.reload();
                     }
                 })
                 .then(function() {
