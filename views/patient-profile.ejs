@@ -81,16 +81,16 @@
                 <div id="main-profile-card" class="card">
                     <div id="button-header">
                         <span class="back">
-                            <form action="./doctor-dashboard.html" method="POST">
+                            <form action="/doctor-dashboard" method="GET">
                                 <button type="submit" class="btn btn-secondary btn-sm">Back</button>
                             </form>
                             <!-- <button type="button" class="btn btn-secondary btn-sm">Back</button> -->
                         </span>
-                        <div>
+                        <div class="appts">
                             <div id=appt-title>Upcoming Appointments</div>
                             <div id="appt-list" class="appointment-button"></div>
                         </div>
-
+                        
                     </div>
                     <hr>
                     <div id="profile-body">
@@ -100,6 +100,7 @@
                         </div>
                     </div>
                 </div>
+            
                 <form action="/book-appointment" method="post" id="book" class="card">
                     <div>
                         <input type="hidden" name="email" value="<%-email%>">
