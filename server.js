@@ -193,42 +193,6 @@ app.post("/edit-patient", (req, res) => {
 	});
 })
 
-// Checks if an email exists -> if so prevent change / creation of new one
-function isEmailUnique(email) {
-	let isUnique;
-	let wait = 1;
-
-	// Search patients for email
-	Patient.findOne({ email: email}).then((patient) => {
-		if (!patient) {
-			// If no patient with that email, check doctors
-			Doctor.findOne({ email: email}).then((doctor) => {
-				if (!doctor) {
-					// Neither patients nor doctors have this email
-					console.log("Is unique")
-					isUnique = true;
-					wait = 0;
-				} else {
-					console.log(doctor)
-					// A doctor has this email
-					isUnique =  false;
-					wait = 0;
-
-				}
-			})
-		} else {
-			console.log(patient)
-			// A patient has this email
-			isUnique =  false;
-			wait = 0;
-
-		}
-	}).catch((error) => {
-		res.status(500).send(error)
-	})
-
-}
-
 /* GET Requests */
 
 // Login
@@ -273,22 +237,19 @@ app.post("/create-patient", (req, res) => {
         medications: []   
     });
 
-	
-		// Set session info
-		req.session.user = patient._id;
-		req.session.email = patient.email;
+	// Set session info
+	req.session.user = patient._id;
+	req.session.email = patient.email;
 
-		// Save patient to the database
-		patient.save(function(err, result) {
-			if (err) {
-				console.err("err", err) 
-
-				// An error occurred, stop execution and return 500
-				return res.status(500).send();
-			} else {
-				res.redirect('/patient-dashboard')
-			}
-		});
+	// Save patient to the database
+	patient.save(function(err, result) {
+		if (err) {
+			// An error occurred, stop execution and return 500
+			return res.status(500).send();
+		} else {
+			res.redirect('/patient-dashboard')
+		}
+	});
 	
     
 });
@@ -384,7 +345,7 @@ app.post('/addAssignedDoctor', (req, res) => {
 // GET patient by email
 app.get('/patients', (req, res) => {
     const email = req.query.email // the id is in the req.body object
-    console.log(email);
+
 	// Otheriwse, find by email
 	Patient.findOne({ email: email}).then((patient) => {
 		if (!patient) {
@@ -524,76 +485,43 @@ app.post("/book-appointment", (req, res) => {
 		time: req.body.end_t
 	}
 
-	// const patient = Patient.findOne({email: patient_email})
-	// .catch((error) => {
-	// 	res.status(400).send(error)
-	// })
-	// const doctor = Patient.findOne({email: doctor_email})
-	// .catch((error) => {
-	// 	res.status(400).send(error)
-	// })
-	var patient;
-	Patient.findOne({email: patient_email})
-	.then((patient_) => {
-		if (!patient_) {
-			res.status(404).send(error)
-		} else {
-		    patient = patient_
-                }
-	})
-	.catch((error) => {
-		res.status(500).send(error)
-	})
-	var doctor;
-	Doctor.findOne({email: doctor_email})
-	.then((doctor_) => {
-		if (!doctor_) {
-			res.status(404).send(error)
-		} else {
-		    doctor = doctor_
-                }
-	})
-	.catch((error) => {
-		res.status(500).send(error)
-	})
-	console.log("patient: " + patient)
-	console.log("doctor" + doctor)
 	const appointment = {
 		name: req.body.appt_type, 
 		start: date_start, 
 		end: date_end, 
-		patient: patient,
-		doctor: doctor
+		patient: patient_email,
+		doctor: doctor_email
 	}
-	
-	Patient.findOne({email: patient_email})
-	.then((patient) => {
+
+	// Find patient to remove doctor from
+	Patient.findOne({email: patient_email}).then((patient) => {
 		if (!patient) {
-			res.status(404).send(error)
-		}
-		patient.appointments.push(appointment)
-		patient.save()
-	})
-	.catch((error) => {
-		res.status(500).send(error)
-	})
 
-	Doctor.findOne({email: doctor_email})
-	.then((doctor) => {
+		} else {
+			patient.appointments.push(appointment);
+			patient.markModified("appointments")
+			patient.save();
+		}
+	}).catch((error) => {
+		res.status(500).send(error)
+	});
+
+	// Find patient to remove doctor from
+	Doctor.findOne({email: doctor_email}).then((doctor) => {
 		if (!doctor) {
-			res.status(404).send(error)
+
+		} else {
+			doctor.appointments.push(appointment);
+			doctor.markModified("appointments")
+			doctor.save().then(() => {
+				res.redirect("/patient-profile?email=" + patient_email);
+			}, (error) => {
+				res.status(400).send(error) // 400 for bad request
+			});
 		}
-		doctor.appointments.push(appointment)
-		doctor.save()
-	})
-	.then((result) => {
-		res.redirect("/patient-profile?email=" + patient_email);
-	})
-	.catch((error) => {
+	}).catch((error) => {
 		res.status(500).send(error)
-	})
-
-
+	});	
 })
 
 app.patch("/update-medication", (req, res) => {
