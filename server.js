@@ -264,7 +264,7 @@ app.post('/addAssignedDoctor', (req, res) => {
 // GET patient by email
 app.get('/patients', (req, res) => {
     const email = req.query.email // the id is in the req.body object
-
+    console.log(email);
 	// Otheriwse, find by email
 	Patient.findOne({ email: email}).then((patient) => {
 		if (!patient) {
@@ -387,27 +387,67 @@ app.post("/add-medication", (req, res) => {
 app.post("/book-appointment", (req, res) => {
 	// update patient and doctor appointment array
 	// submit appointment
-	const appt = req.body.appt_type
-	const start = req.body.start_t
-	const end = req.body.end_t
-	const month = req.body.month
-	const day = req.body.day
-	const year = req.body.year
-	const email = req.body.email
 
-	const date_start = dateTime(year, month, day, start);
-	const date_end = dateTime(year, month, day, end);
+	const patient_email = req.body.email
+	const doctor_email = req.session.email
+
+	const date_start = {
+		year : req.body.year, 
+		month: req.body.month, 
+		date: req.body.day, 
+		start: req.body.start_t
+	}
+	const date_end = {
+		year : req.body.year, 
+		month: req.body.month, 
+		date: req.body.day, 
+		start: req.body.end_t
+	}
+
+	const patient = Patient.findOne({email: patient_email})
+	.catch((error) => {
+		res.status(400).send(error)
+	})
+	const doctor = Patient.findOne({email: doctor_email})
+	.catch((error) => {
+		res.status(400).send(error)
+	})
+
+	const appointment = {
+		name: req.body.appt_type, 
+		start: date_start, 
+		end: date_end, 
+		patient: patient,
+		doctor: doctor
+	}
 	
-	console.log(appt, start, end, month, year, email)
-	// add appt obj to patient and doctor
-	// redirect page
-	Patient.findOne({email: email})
+	Patient.findOne({email: patient_email})
 	.then((patient) => {
 		if (!patient) {
 			res.status(404).send(error)
 		}
-
+		patient.appointments.push(appointment)
+		patient.save()
 	})
+	.catch((error) => {
+		res.status(500).send(error)
+	})
+
+	Doctor.findOne({email: doctor_email})
+	.then((doctor) => {
+		if (!doctor) {
+			res.status(404).send(error)
+		}
+		doctor.appointments.push(appointment)
+		doctor.save()
+	})
+	.then((result) => {
+		res.redirect("/patient-profile?email=" + patient_email);
+	})
+	.catch((error) => {
+		res.status(500).send(error)
+	})
+
 
 })
 
