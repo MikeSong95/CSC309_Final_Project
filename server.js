@@ -475,24 +475,49 @@ app.post("/book-appointment", (req, res) => {
 		year : req.body.year, 
 		month: req.body.month, 
 		date: req.body.day, 
-		start: req.body.start_t
+		time: req.body.start_t
 	}
 	const date_end = {
 		year : req.body.year, 
 		month: req.body.month, 
 		date: req.body.day, 
-		start: req.body.end_t
+		time: req.body.end_t
 	}
 
-	const patient = Patient.findOne({email: patient_email})
-	.catch((error) => {
-		res.status(400).send(error)
+	// const patient = Patient.findOne({email: patient_email})
+	// .catch((error) => {
+	// 	res.status(400).send(error)
+	// })
+	// const doctor = Patient.findOne({email: doctor_email})
+	// .catch((error) => {
+	// 	res.status(400).send(error)
+	// })
+	var patient;
+	Patient.findOne({email: patient_email})
+	.then((patient_) => {
+		if (!patient_) {
+			res.status(404).send(error)
+		} else {
+		    patient = patient_
+                }
 	})
-	const doctor = Patient.findOne({email: doctor_email})
 	.catch((error) => {
-		res.status(400).send(error)
+		res.status(500).send(error)
 	})
-
+	var doctor;
+	Doctor.findOne({email: doctor_email})
+	.then((doctor_) => {
+		if (!doctor_) {
+			res.status(404).send(error)
+		} else {
+		    doctor = doctor_
+                }
+	})
+	.catch((error) => {
+		res.status(500).send(error)
+	})
+	console.log("patient: " + patient)
+	console.log("doctor" + doctor)
 	const appointment = {
 		name: req.body.appt_type, 
 		start: date_start, 
