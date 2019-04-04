@@ -121,25 +121,28 @@
                         </div>
                     </div>
                 </div>
-                <form id="book" class="card">
+                <form action="/book-appointment" method="post" id="book" class="card">
+                    <div>
+                        <input type="hidden" name="email" value="<%-email%>">
+                    </div>
                     <div class="form-group" class="book_input">
                         <label for="exampleFormControlInput1">Appointment:</label>
-                        <input type="text" class="form-control" id="exampleFormControlInput1"
+                        <input name="appt_type" type="text" class="form-control" id="exampleFormControlInput1"
                             placeholder="Appointment Type">
                     </div>
                     <div class="form-group" class="book_input">
                         <label for="exampleFormControlInput1">Start time:</label>
-                        <input type="text" class="form-control" id="exampleFormControlInput1"
+                        <input name="start_t" type="text" class="form-control" id="exampleFormControlInput1"
                             placeholder="Start time">
                     </div>
                     <div class="form-group" class="book_input">
                         <label for="exampleFormControlInput1">End time:</label>
-                        <input type="text" class="form-control" id="exampleFormControlInput1"
+                        <input name="end_t" type="text" class="form-control" id="exampleFormControlInput1"
                             placeholder="End time">
                     </div>
                     <div class="form-group" class="book_input">
                         <label for="exampleFormControlSelect1">Month:</label>
-                        <select class="form-control" id="exampleFormControlSelect1">
+                        <select name="month" class="form-control" id="exampleFormControlSelect1">
                             <option>Jan</option>
                             <option>Feb</option>
                             <option>Mar</option>
@@ -153,10 +156,46 @@
                             <option>Nov</option>
                             <option>Dec</option>
                         </select>
-                        <div class="form-group" class="book_input">
-                            <label for="exampleFormControlInput1">Year:</label>
-                            <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Year">
-                        </div>
+                    </div>
+                    <div class="form-group" class="book_input">
+                        <label for="exampleFormControlSelect1">Month:</label>
+                        <select name="day" class="form-control" id="exampleFormControlSelect1">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                            <option>6</option>
+                            <option>7</option>
+                            <option>8</option>
+                            <option>9</option>
+                            <option>10</option>
+                            <option>11</option>
+                            <option>12</option>
+                            <option>13</option>
+                            <option>14</option>
+                            <option>15</option>
+                            <option>16</option>
+                            <option>17</option>
+                            <option>18</option>
+                            <option>19</option>
+                            <option>20</option>
+                            <option>21</option>
+                            <option>22</option>
+                            <option>23</option>
+                            <option>24</option>
+                            <option>25</option>
+                            <option>26</option>
+                            <option>27</option>
+                            <option>28</option>
+                            <option>29</option>
+                            <option>30</option>
+                            <option>31</option>
+                        </select>
+                    </div>
+                    <div class="form-group" class="book_input">
+                        <label for="exampleFormControlInput1">Year:</label>
+                        <input name="year" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Year">
                     </div>
                     <input class="btn btn-secondary btn-sm" type="submit" value="Book Appointment"/>
 

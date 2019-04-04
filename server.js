@@ -357,6 +357,75 @@ app.delete("/removeAssignedPatient", (req, res) => {
 	});
 });
 
+app.post("/add-medication", (req, res) => {
+	// update patient med array
+	// add med button
+	const name = req.body.name;
+	const dosage = req.body.dosage;
+	const description = req.body.description;
+	const patient_email = req.body.email;
+
+	Patient.findOne({"email": patient_email})
+	.then((patient) => {
+		if (!patient) {
+			res.status(404).send("Not valid patient email")
+		} else {
+			patient.medications.push({name, dosage, description});
+			patient.save();
+		}
+	})
+	.then((result) => {
+		res.redirect("/patient-profile?email=" + patient_email);
+	}, (error) => {
+		res.status(400).send(error) // 400 for bad request
+	})
+	.catch((error) => {
+		res.status(500).send(error)
+	})
+})
+
+app.post("/book-appointment", (req, res) => {
+	// update patient and doctor appointment array
+	// submit appointment
+	const appt = req.body.appt_type
+	const start = req.body.start_t
+	const end = req.body.end_t
+	const month = req.body.month
+	const day = req.body.day
+	const year = req.body.year
+	const email = req.body.email
+
+	const date_start = dateTime(year, month, day, start);
+	const date_end = dateTime(year, month, day, end);
+	
+	console.log(appt, start, end, month, year, email)
+	// add appt obj to patient and doctor
+	// redirect page
+	Patient.findOne({email: email})
+	.then((patient) => {
+		if (!patient) {
+			res.status(404).send(error)
+		}
+
+	})
+
+})
+
+app.patch("/update-medication", (req, res) => {
+	// update medication in patient med array
+	// save and submit
+})
+
+app.delete("/delete-medication", (req, res) => {
+	// delete medication from patient med array
+	// delete button
+	// call get
+})
+
+// back button to /doctor-dashboard
+
+
+
 app.listen(port, () => {
 	log(`Listening on port ${port}...`)
 });
