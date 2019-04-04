@@ -21,6 +21,10 @@ $(function() {
     getCurrentUser();
     user = createDoctor(user_data._id, user_data.password, user_data.email,user_data.phone, user_data.fName, user_data.lName, user_data.specialty, user_data.address, user_data.assignedPatients, user_data.appointments, user_data.notifications);
 
+    if (getUserNotifications().length != 0) {
+        $('#navbar-notif-icon').attr("src","./resources/images/icons/notification-icon.png")
+    }
+
     getAllPatients();
 
     populate_appointments();
