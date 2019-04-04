@@ -560,17 +560,15 @@ app.patch("/update-medication", (req, res) => {
 				console.log(med.description)
 			}
 		});
-		patient.save()
+		patient.save().then((result) => {
+			res.redirect("/patient-profile?email=" + email);
+		},(error) => {
+			res.status(400).send()
+		})
+		.catch((error) => {
+			res.status(500).send(error)
+		})
 	})
-	.then((result) => {
-		res.redirect("/patient-profile?email=" + email);
-	},(error) => {
-		res.status(400).send()
-	})
-	.catch((error) => {
-		res.status(500).send(error)
-	})
-	
 })
 
 app.delete("/delete-medication", (req, res) => {
@@ -592,12 +590,11 @@ app.delete("/delete-medication", (req, res) => {
 			}
 		}
 		patient.medications.splice(index_to_remove, 1);
-		patient.save()
-	})
-	.then((result) => {
-		res.redirect("/patient-profile?email=" + email);
-	},(error) => {
-		res.status(400).send()
+		patient.save().then((result) => {
+			res.redirect("/patient-profile?email=" + email);
+		},(error) => {
+			res.status(400).send()
+		})
 	})
 })
 
