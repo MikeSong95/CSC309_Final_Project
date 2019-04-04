@@ -277,6 +277,34 @@ function edit_medications_form() {
         for (let i = 0; i < user.medications.length; i++) {
             if (user.medications[i]["name"] == med_name) {
                 user.medications[i]["description"] = new_text;
+                const data = {
+                    medication: user.medications[i]["name"],
+                    description: user.medications[i]["description"],
+                    email: user.getEmail()
+                }
+                const url = "/update-medication"
+                const request = new Request(url, {
+                    method: 'patch', 
+                    body: JSON.stringify(data), // json input to string
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*', //client tell server the content types they accept
+                        'Content-Type': 'application/json' // content type of client data to server 
+                    },
+                });
+                fetch(request)
+                .then(function(response) {
+                    if (response.status !== 200) {
+                    console.log('Status Code: ' +
+                        response.status);
+                    return;
+                    }
+                })
+                .then(function() {
+                    populate_assigned_medications();
+                })
+                .catch((error) => {
+                    res.status(500).send()
+                })
             }
         }
         $(textDiv).empty();
@@ -384,11 +412,37 @@ function delete_medication() {
         console.log(user.medications[i]["name"])
         if (med_name == user.medications[i]["name"]) {
             user.medications.splice(i, 1)
-            populate_assigned_medications();
+            const data = {
+                    medication: med_name,
+                    email: user.getEmail()
+                }
+                const url = "/delete-medication"
+                const request = new Request(url, {
+                    method: 'delete', 
+                    body: JSON.stringify(data), // json input to string
+                    headers: {
+                        'Accept': 'application/json, text/plain, */*', //client tell server the content types they accept
+                        'Content-Type': 'application/json' // content type of client data to server 
+                    },
+                });
+                fetch(request)
+                .then(function(response) {
+                    if (response.status !== 200) {
+                    console.log('Status Code: ' +
+                        response.status);
+                    return;
+                    }
+                })
+                .then(function() {
+                    populate_assigned_medications();
+                })
+                .catch((error) => {
+                    res.status(500).send()
+                })
+            }
         }
     }
-}
-
+    
 function cancel_new_medication() {
     const med_add = $($(this).parent())[0];
     $(med_add).empty()

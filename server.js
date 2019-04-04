@@ -524,15 +524,81 @@ app.post("/book-appointment", (req, res) => {
 	});	
 })
 
+
 app.patch("/update-medication", (req, res) => {
 	// update medication in patient med array
 	// save and submit
+	const medication = req.body.medication
+	const description = req.body.description
+	const email = req.body.email
+	console.log("med: " + medication)
+	console.log("desc: " + description)
+	console.log("email: " + email)
+	// Patient.findOneAndUpdate(
+	// 	{"email": email, "medications.name": medication}, 
+	// 	{"$set": {"medications.$": {description} }}, 
+	// 	{new: true})
+	// .then((patient)=> {
+	// 	if (!patient) {
+	// 		res.status(404).send()
+	// 	}
+	// 	patient.save()
+
+	// })
+	Patient.findOne({"email": email})
+	.then((patient)=> {
+		if (!patient) {
+			res.status(404).send("Patient does not exist")
+		}
+		console.log(patient.medications)
+		patient.medications.forEach(med => {
+			console.log(med)
+			
+			if (med.name == medication) {
+				med.description = description
+				console.log(med.name)
+				console.log(med.description)
+			}
+		});
+		patient.save()
+	})
+	.then((result) => {
+		res.redirect("/patient-profile?email=" + email);
+	},(error) => {
+		res.status(400).send()
+	})
+	.catch((error) => {
+		res.status(500).send(error)
+	})
+	
 })
 
 app.delete("/delete-medication", (req, res) => {
 	// delete medication from patient med array
 	// delete button
 	// call get
+	const medication = req.body.medication
+	const email = req.body.email
+
+	Patient.findOne({email:email})
+	.then((patient) => {
+		if (!patient) {
+			res.status(404).send()
+		}
+		let index_to_remove;
+		for (let i=0; i < patient.medications.length; i++) {
+			if (patient.medications[i].name == medication) {
+				index_to_remove = i;
+			}
+		}
+		patient.medications.splice(index_to_remove, 1);
+		patient.save()
+	})
+	.then((result) => {
+		res.redirect("/patient-profile?email=" + email);
+	},(error) => {
+		res.status(400).send()
+	})
 })
 
 // back button to /doctor-dashboard
