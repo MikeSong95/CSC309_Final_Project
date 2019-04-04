@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+    <meta charset="utf-8">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">    <!-- Index CSS -->
+    <link rel="stylesheet" type="text/css" href="./css/patient-edit-profile.css">
+ </head>
+ <body>
+    <div id="background">
+        <img src="./resources/images/bg.jpg" class="stretch" alt="" />
+    </div>
+    <!-- Dashboard Navbar -->
+    <nav class="navbar">
+        <a class="navbar-brand" href="#">
+            <img class="navbar-logo" src="./resources/images/icons/logo-icon.png" width="40" height="40" alt="">
+        </a>
+        <ul class="d-flex justify-content-end align-items-center nav-icon">
+            <li class="nav-item">
+                <div class="btn-group">
+                    <button class="btn"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">
+                            <img class="navbar-icon" src="./resources/images/icons/stockprofile-icon.png">
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item roboto-light" href="#">Profile</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item roboto-light" href="./index.html">Log Out</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    <!-- Profile Edit Page -->
+    <div class="edit-profile">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-md-3">
+              <div>
+                <img src="./resources/images/mark.jpeg" class="profile-picture" alt="profile">
+              </div>
+            </div>
+            
+            <!-- User info edit -->
+            <div class="col-md-9">
+              <h4>Edit Profile</h4>
+              
+              <form class="form-horizontal" role="form">
+                <div class="form-group">
+                  <label class="col-lg-3">First Name:</label>
+                  <div class="col-lg-8">
+                    <input class="form-control" type="text" value="Mark" readonly>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-lg-3">Last name:</label>
+                  <div class="col-lg-8">
+                    <input class="form-control" type="text" value="Kazakevich" readonly>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-lg-3">Email:</label>
+                  <div class="col-lg-8">
+                    <input class="form-control" type="text" value="useremail@gmail.com">
+                  </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-lg-3">Phone:</label>
+                    <div class="col-lg-8">
+                      <input class="form-control" type="text" value="647 123 4567">
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3">Password:</label>
+                  <div class="col-md-8">
+                    <input class="form-control" type="password" value="user">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3">Confirm password:</label>
+                  <div class="col-md-8">
+                    <input class="form-control" type="password" value="user">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3"></label>
+                  <div class="col-md-8">
+                    <input type="button" id="submitButton" class="btn btn-primary" value="Save">
+                  </div>
+                </div>
+              </form>
+            </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <% include ./renderers/patient-edit-profile-renderer %> 
+</body>

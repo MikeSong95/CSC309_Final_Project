@@ -85,6 +85,18 @@ app.get("/doctor-dashboard", (req,res) => {
 	}
 });
 
+//TODO: add session check
+// Route to patient edit profile
+app.get("/patient-edit-profile", (req,res) => {
+    res.render("patient-edit-profile");
+});
+
+//TODO: add session check
+// Route to patient dashboard
+app.get("/doctor-edit-profile", (req,res) => {
+	res.render("doctor-edit-profile");
+});
+
 // Route to create user
 app.get("/create-user", (req, res) => {
 	res.render("create-user");
@@ -141,12 +153,12 @@ app.post("/create-patient", (req, res) => {
     // Save patient to the database
 	patient.save(function(err, result) {
         if (err) {
-            console.err("err", err) 
-
+			console.err("err", err) 
+			
             // An error occurred, stop execution and return 500
             return res.status(500).send();
         } else {
-            res.redirect('/patient-dashboard')
+            res.redirect('/patient-dashboard');
         }
     });
 });
@@ -288,6 +300,39 @@ app.get('/doctors', (req, res) => {
 		res.status(500).send(error)
 	})
 })
+
+//PATCH patient info
+app.post('/editPatientProfile', function(req, res, next){
+
+    const email = req.query.email // the id is in the req.body object
+    
+	Patient.find({ email: email}).then((patient) => {
+		if (!patient) {
+			console.log("Patient not found");
+			res.status(404).send();
+		} else {
+			
+			//Update value for patient
+			patient.email = req.body.email.trim();
+			patient.phoneNum = req.body.phone.trim();
+			patient.password = req.body.password.trim();
+
+			//Saving patient in database
+			patient.save(function(err, result) {
+				if (err) {
+					console.err("err", err) 
+					return res.status(500).send();
+				} else {
+					res.redirect("/patient-dashboard");
+				}
+			});
+		}
+	}).catch((error) => {
+		res.status(500).send(error)
+	})
+})
+
+//PATCH doctor info
 
 app.listen(port, () => {
 	log(`Listening on port ${port}...`)
