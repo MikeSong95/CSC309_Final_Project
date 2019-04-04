@@ -140,6 +140,7 @@ app.get("/patient-edit-profile", (req, res) => {
 });
 
 app.post("/edit-patient", (req, res) => {
+	console.log("Editing patient")
 	const data = {
 		password: req.body.password,
 		email: req.body.email, 
