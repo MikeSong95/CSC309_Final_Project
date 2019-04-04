@@ -104,16 +104,14 @@ app.get("/doctor-dashboard", (req,res) => {
 	}
 });
 
-//TODO: add session check
-// Route to patient edit profile
-app.get("/patient-edit-profile", (req,res) => {
-    res.render("patient-edit-profile");
-});
-
-//TODO: add session check
-// Route to patient dashboard
+// Route to doctor edit profile
 app.get("/doctor-edit-profile", (req,res) => {
-	res.render("doctor-edit-profile");
+	// check if we have active session cookie
+	if (req.session.user) {
+		res.render("doctor-edit-profile");
+	} else {
+		res.redirect('/')
+	}
 });
 
 // Route to patient profile page
@@ -151,7 +149,7 @@ app.post("/edit-patient", (req, res) => {
 		gender:req.body.gender,
 		hcNum: req.body.hcnum
 	}
-
+	
 	// Otherwise, findById
 	Patient.findOne({email:req.session.email}).then((patient) => {
 		if (!patient) {
@@ -262,8 +260,6 @@ app.post("/create-patient", (req, res) => {
 			res.redirect('/patient-dashboard')
 		}
 	});
-	
-    
 });
 
 // Create doctor
@@ -642,35 +638,6 @@ app.post("/book-appointment", (req, res) => {
 	}).catch((error) => {
 		res.status(500).send(error)
 	});	
-})
-
-app.post('/editPatientProfile', function(req, res, next){
-
-    const email = req.query.email // the id is in the req.body object
-    
-	Patient.find({ email: email}).then((patient) => {
-		if (!patient) {
-			console.log("Patient not found");
-			res.status(404).send();
-		} 
-		else {
-			
-			//Update value for patient
-			patient.email = req.body.email.trim();
-			patient.phoneNum = req.body.phone.trim();
-			patient.password = req.body.password.trim();
-
-			//Saving patient in database
-			patient.save(function(err, result) {
-				if (err) {
-					console.err("err", err) 
-					return res.status(500).send();
-				} else {
-					res.redirect("/patient-dashboard");
-				}
-			});
-		}
-	});
 })
 
 app.patch("/update-medication", (req, res) => {
