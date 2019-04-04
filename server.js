@@ -104,6 +104,18 @@ app.get("/doctor-dashboard", (req,res) => {
 	}
 });
 
+//TODO: add session check
+// Route to patient edit profile
+app.get("/patient-edit-profile", (req,res) => {
+    res.render("patient-edit-profile");
+});
+
+//TODO: add session check
+// Route to patient dashboard
+app.get("/doctor-edit-profile", (req,res) => {
+	res.render("doctor-edit-profile");
+});
+
 // Route to patient profile page
 // Require email of patient in query to pass to patient profile page
 app.get("/patient-profile", (req, res) => {
@@ -524,6 +536,34 @@ app.post("/book-appointment", (req, res) => {
 	});	
 })
 
+app.post('/editPatientProfile', function(req, res, next){
+
+    const email = req.query.email // the id is in the req.body object
+    
+	Patient.find({ email: email}).then((patient) => {
+		if (!patient) {
+			console.log("Patient not found");
+			res.status(404).send();
+		} 
+		else {
+			
+			//Update value for patient
+			patient.email = req.body.email.trim();
+			patient.phoneNum = req.body.phone.trim();
+			patient.password = req.body.password.trim();
+
+			//Saving patient in database
+			patient.save(function(err, result) {
+				if (err) {
+					console.err("err", err) 
+					return res.status(500).send();
+				} else {
+					res.redirect("/patient-dashboard");
+				}
+			});
+		}
+	});
+})
 
 app.patch("/update-medication", (req, res) => {
 	// update medication in patient med array
