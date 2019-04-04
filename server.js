@@ -74,10 +74,18 @@ app.get('/logout', (req, res) => {
 
 // Route to patient dashboard
 app.get("/patient-dashboard", (req,res) => {
-    // check if we have active session cookie
+	// Route can handle email via query or body
+	let email;
+	if (req.body.email == undefined) {
+		email = req.session.email
+	} else {
+		email = req.body.email
+	}
+
+	// check if we have active session cookie
 	if (req.session.user) {
 		res.render('patient-dashboard', {
-			email: req.session.email
+			email: email
 		});
 	} else {
 		res.redirect('/')
@@ -112,6 +120,78 @@ app.get("/create-user", (req, res) => {
 	res.render("create-user");
 });
 
+app.get("/patient-edit-profile", (req, res) => {
+	// check if we have active session cookie
+	if (req.session.user) {
+		res.render("patient-edit-profile");
+	} else {
+		res.redirect('/')
+	}
+});
+
+app.post("/edit-patient", (req, res) => {
+	const data = {
+		password: req.body.password,
+		email: req.body.email, 
+		phoneNum:req.body.phone,
+		fName:req.body.fname,
+		lName:req.body.lname,
+		gender:req.body.gender,
+		hcNum: req.body.hcnum
+	}
+
+	// Otherwise, findById
+	Patient.findOne({email:req.session.email}).then((patient) => {
+		if (!patient) {
+			res.status(404).send();
+		} else {
+			if (data.password != "") {
+				patient.password = data.password;		
+				// Mark it as modified
+				patient.markModified('password');
+			} 
+			if (data.email != "") {
+				patient.email = data.email;
+				// Mark it as modified
+				patient.markModified('email');
+			}
+			if (data.phoneNum != "") {
+				patient.phoneNum = data.phoneNum;
+				// Mark it as modified
+				patient.markModified('phoneNum');
+			}
+			if (data.fName != "") {
+				patient.fName = data.fName;
+				// Mark it as modified
+				patient.markModified('fName');
+			}
+			if (data.lName != "") {
+				patient.lName = data.lName;
+				// Mark it as modified
+				patient.markModified('lName');
+			}
+			if (data.gender != "") {
+				patient.gender = data.gender;
+				// Mark it as modified
+				patient.markModified('gender');
+			}
+			if (data.hcNum != "") {
+				patient.hcNum = data.hcNum;
+				// Mark it as modified
+				patient.markModified('hcNum');
+			}
+
+			// Save it
+			patient.save().then(() => {
+				res.redirect('/patient-dashboard?email=' + req.session.email)
+			}, (error) => {
+				res.status(400).send(error) // 400 for bad request
+			})
+		}
+	}).catch((error) => {
+		res.status(500).send();
+	});
+})
 /* GET Requests */
 
 // Login
