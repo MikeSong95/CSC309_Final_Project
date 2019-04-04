@@ -61,6 +61,17 @@ app.get("/", (req,res) => {
     res.render("index",{error: false});
 });
 
+// Logout route
+app.get('/logout', (req, res) => {
+	req.session.destroy((error) => {
+		if (error) {
+			res.status(500).send(error)
+		} else {
+			res.redirect('/')
+		}
+	})
+})
+
 // Route to patient dashboard
 app.get("/patient-dashboard", (req,res) => {
     // check if we have active session cookie
