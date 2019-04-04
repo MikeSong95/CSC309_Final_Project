@@ -451,8 +451,6 @@ app.delete("/removeAssignedPatient", (req, res) => {
 });
 
 app.post("/add-medication", (req, res) => {
-	// update patient med array
-	// add med button
 	const name = req.body.name;
 	const dosage = req.body.dosage;
 	const description = req.body.description;
@@ -478,23 +476,24 @@ app.post("/add-medication", (req, res) => {
 })
 
 app.post("/book-appointment", (req, res) => {
-	// update patient and doctor appointment array
-	// submit appointment
-
 	const patient_email = req.body.email
 	const doctor_email = req.session.email
+
+	// format time into military time
+	const s_time = req.body.start_t.slice(0,2) + req.body.start_t.slice(3,5)
+	const e_time = req.body.end_t.slice(0,2) + req.body.end_t.slice(3,5)
 
 	const date_start = {
 		year : req.body.year, 
 		month: req.body.month, 
 		date: req.body.day, 
-		time: req.body.start_t
+		time: s_time
 	}
 	const date_end = {
 		year : req.body.year, 
 		month: req.body.month, 
 		date: req.body.day, 
-		time: req.body.end_t
+		time: e_time
 	}
 
 	const appointment = {
@@ -566,25 +565,12 @@ app.post('/editPatientProfile', function(req, res, next){
 })
 
 app.patch("/update-medication", (req, res) => {
-	// update medication in patient med array
-	// save and submit
 	const medication = req.body.medication
 	const description = req.body.description
 	const email = req.body.email
 	console.log("med: " + medication)
 	console.log("desc: " + description)
 	console.log("email: " + email)
-	// Patient.findOneAndUpdate(
-	// 	{"email": email, "medications.name": medication}, 
-	// 	{"$set": {"medications.$": {description} }}, 
-	// 	{new: true})
-	// .then((patient)=> {
-	// 	if (!patient) {
-	// 		res.status(404).send()
-	// 	}
-	// 	patient.save()
-
-	// })
 	Patient.findOne({"email": email}).then((patient)=> {
 		if (!patient) {
 			res.status(404).send("Patient does not exist")
@@ -608,9 +594,6 @@ app.patch("/update-medication", (req, res) => {
 })
 
 app.delete("/delete-medication", (req, res) => {
-	// delete medication from patient med array
-	// delete button
-	// call get
 	const medication = req.body.medication
 	const email = req.body.email
 
@@ -634,7 +617,6 @@ app.delete("/delete-medication", (req, res) => {
 	})
 })
 
-// back button to /doctor-dashboard
 
 
 
