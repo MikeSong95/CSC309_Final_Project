@@ -117,7 +117,7 @@ app.get("/patient-profile", (req, res) => {
 
 // Route to create user
 app.get("/create-user", (req, res) => {
-	res.render("create-user");
+	res.render("create-user", {error:false});
 });
 
 app.get("/patient-edit-profile", (req, res) => {
@@ -192,6 +192,43 @@ app.post("/edit-patient", (req, res) => {
 		res.status(500).send();
 	});
 })
+
+// Checks if an email exists -> if so prevent change / creation of new one
+function isEmailUnique(email) {
+	let isUnique;
+	let wait = 1;
+
+	// Search patients for email
+	Patient.findOne({ email: email}).then((patient) => {
+		if (!patient) {
+			// If no patient with that email, check doctors
+			Doctor.findOne({ email: email}).then((doctor) => {
+				if (!doctor) {
+					// Neither patients nor doctors have this email
+					console.log("Is unique")
+					isUnique = true;
+					wait = 0;
+				} else {
+					console.log(doctor)
+					// A doctor has this email
+					isUnique =  false;
+					wait = 0;
+
+				}
+			})
+		} else {
+			console.log(patient)
+			// A patient has this email
+			isUnique =  false;
+			wait = 0;
+
+		}
+	}).catch((error) => {
+		res.status(500).send(error)
+	})
+
+}
+
 /* GET Requests */
 
 // Login
@@ -236,21 +273,24 @@ app.post("/create-patient", (req, res) => {
         medications: []   
     });
 
-    // Set session info
-    req.session.user = patient._id;
-    req.session.email = patient.email;
+	
+		// Set session info
+		req.session.user = patient._id;
+		req.session.email = patient.email;
 
-    // Save patient to the database
-	patient.save(function(err, result) {
-        if (err) {
-            console.err("err", err) 
+		// Save patient to the database
+		patient.save(function(err, result) {
+			if (err) {
+				console.err("err", err) 
 
-            // An error occurred, stop execution and return 500
-            return res.status(500).send();
-        } else {
-            res.redirect('/patient-dashboard')
-        }
-    });
+				// An error occurred, stop execution and return 500
+				return res.status(500).send();
+			} else {
+				res.redirect('/patient-dashboard')
+			}
+		});
+	
+    
 });
 
 // Create doctor
