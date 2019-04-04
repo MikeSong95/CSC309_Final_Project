@@ -450,6 +450,115 @@ app.delete("/removeAssignedPatient", (req, res) => {
 	});
 });
 
+app.delete("/patient-remove-appointment", (req, res) => {
+	const doctor_email = req.body.doctor_email;
+	const start_time = req.body.start_time;
+	const date = req.body.date;
+
+	// Find patient to appointment from
+	Patient.findOne({email: req.session.email}).then((patient) => {
+		if (!patient) {
+
+		} else {
+			for (let i = 0; i < patient.appointments.length; i++) {
+	
+				let appt_date = patient.appointments[i].start.month + " " + patient.appointments[i].start.date + ", " + patient.appointments[i].start.year;
+
+				if (patient.appointments[i].doctor == doctor_email && patient.appointments[i].start.time == start_time && appt_date == date) {
+					patient.appointments.splice(i, 1);
+					// Mark it as modified
+					patient.markModified('appointments');
+					// Save it
+					patient.save().then(() => {
+						// Find doctor to appointment from
+						Doctor.findOne({email: doctor_email}).then((doctor) => {
+							if (!doctor) {
+
+							} else {
+								for (let i = 0; i < doctor.appointments.length; i++) {
+
+									let appt_date = doctor.appointments[i].start.month + " " + doctor.appointments[i].start.date + ", " + doctor.appointments[i].start.year;
+
+									if (doctor.appointments[i].doctor == doctor_email && doctor.appointments[i].start.time == start_time && appt_date == date) {
+										doctor.appointments.splice(i, 1);
+										// Mark it as modified
+										doctor.markModified('appointments');
+										// Save it
+										doctor.save().then(() => {
+											res.send("Success");
+										});
+									}
+								}
+							}
+						}).catch((error) => {
+							res.status(500).send(error)
+						});
+					});
+				}
+			}
+		}
+	}).catch((error) => {
+		res.status(500).send(error)
+	});
+
+	
+})
+
+
+app.delete("/doctor-remove-appointment", (req, res) => {
+	const patient_email = req.body.patient_email;
+	const start_time = req.body.start_time;
+	const date = req.body.date;
+
+	// Find doctor to appointment from
+	Doctor.findOne({email: req.session.email}).then((doctor) => {
+		if (!doctor) {
+
+		} else {
+			for (let i = 0; i < doctor.appointments.length; i++) {
+	
+				let appt_date = doctor.appointments[i].start.month + " " + doctor.appointments[i].start.date + ", " + doctor.appointments[i].start.year;
+
+				if (doctor.appointments[i].patient == patient_email && doctor.appointments[i].start.time == start_time && appt_date == date) {
+					doctor.appointments.splice(i, 1);
+					// Mark it as modified
+					doctor.markModified('appointments');
+					// Save it
+					doctor.save().then(() => {
+						// Find doctor to appointment from
+						Patient.findOne({email: patient_email}).then((patient) => {
+							if (!patient) {
+
+							} else {
+								for (let i = 0; i < patient.appointments.length; i++) {
+
+									let appt_date = patient.appointments[i].start.month + " " + patient.appointments[i].start.date + ", " + patient.appointments[i].start.year;
+
+									if (patient.appointments[i].patient == patient_email && patient.appointments[i].start.time == start_time && appt_date == date) {
+										patient.appointments.splice(i, 1);
+										// Mark it as modified
+										patient.markModified('appointments');
+										// Save it
+										patient.save().then(() => {
+											res.send("Success");
+										});
+									}
+								}
+							}
+						}).catch((error) => {
+							res.status(500).send(error)
+						});
+					});
+				}
+			}
+		}
+	}).catch((error) => {
+		res.status(500).send(error)
+	});
+
+	
+})
+
 app.post("/add-medication", (req, res) => {
 	// update patient med array
 	// add med button

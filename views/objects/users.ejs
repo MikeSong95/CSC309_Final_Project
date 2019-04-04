@@ -223,13 +223,7 @@ function createDoctor(id_, password_, email_, phoneNum_, fName_, lName_, special
 
 function clearNotification(userID, notif) {
     // Find user from userID
-
-    for (let i = 0; i < patientList.length; i++) {
-        if (patientList[i].getID() == userID) {
-            patientList[i].clearNotification(notif);
-            break;
-        }
-    }
+    user.clearNotification(notif);
 }
 
 function createNotification(userID, item, freq) {
@@ -244,30 +238,15 @@ function createNotification(userID, item, freq) {
 
     const newNotification = new Notification(description, freq);
     
-    // Find user from userID
-
-    for (let i = 0; i < patientList.length; i++) {
-        if (patientList[i].getID() == userID) {
-            patientList[i].setNotification(newNotification);
-            break;
-        }
-    }
+    user.setNotification(newNotification);
 }
 
 function removeNotification(userID, notificationNum) {
-    // Find user from userID
-    for (let i = 0; i < patientList.length; i++) {
-        if (patientList[i].getID() == userID) {
-            patientList[i].notifications.splice(notificationNum,1);
-            if (patientList[i].notifications.length === 0) {
-                $('#navbar-notif-icon').attr("src","./resources/images/icons/notification-none-icon.png")
-            }
-            break;
-        }
+    user.notifications.splice(notificationNum,1);
+    if (user.notifications.length === 0) {
+        $('#navbar-notif-icon').attr("src","./resources/images/icons/notification-none-icon.png")
     }
 }
-
-// Cannot detect user vs doctor yet until SERVER CALL so make separate functions for now
 
 function createDoctorNotification(userID, item, freq) {
     const description = "Reminder for: " + item;
@@ -280,38 +259,20 @@ function createDoctorNotification(userID, item, freq) {
     } 
 
     const newNotification = new Notification(description, freq);
-    
-    // Find user from userID
-
-    for (let i = 0; i < doctorList.length; i++) {
-        if (doctorList[i].getID() == userID) {
-            doctorList[i].setNotification(newNotification);
-            break;
-        }
-    }
+        
+    user.setNotification(newNotification);
 }
 
 function clearDoctorNotification(userID, notif) {
     // Find user from userID
 
-    for (let i = 0; i < doctorList.length; i++) {
-        if (doctorList[i].getID() == userID) {
-            doctorList[i].clearNotification(notif);
-            break;
-        }
-    }
+    user.clearNotification(notif);
 }
 
 function removeDoctorNotification(userID, notificationNum) {
-    // Find user from userID
-    for (let i = 0; i < doctorList.length; i++) {
-        if (doctorList[i].getID() == userID) {
-            doctorList[i].notifications.splice(notificationNum,1);
-            if (doctorList[i].notifications.length === 0) {
-                $('#navbar-notif-icon').attr("src","./resources/images/icons/notification-none-icon.png")
-            }
-            break;
-        }
+    user.notifications.splice(notificationNum,1);
+    if (user.notifications.length === 0) {
+        $('#navbar-notif-icon').attr("src","./resources/images/icons/notification-none-icon.png")
     }
 }
 

@@ -135,6 +135,9 @@ function populate_appointments() {
                                                     '<a onclick="createDoctorNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
                                                 '</div>'+
                                         '</div>'+
+                                        '<button class="btn" aria-haspopup="true" aria-expanded="false" type="button">'+
+                                                '<img onclick="deleteDoctorAppointment(\''+appointmentList[i].getPatient()+'\','+'\''+appointmentList[i].getMilitaryStartTime()+'\''+','+'\''+appointmentList[i].getDate()+'\''+')" class="hover-pointer navbar-icon" src="./resources/images/icons/delete-icon-sm.png">'+
+                                            '</button>'+
                                     '</div>'+
                                 '</div>')
     }
@@ -164,6 +167,22 @@ function populate_patients() {
                                     '</div>')
     }
 }
+
+function deleteDoctorAppointment(patient, start, date) {
+    $.ajax({
+        type: 'DELETE',
+        url:"/doctor-remove-appointment",
+        data: {
+            patient_email: patient,
+            start_time: start,
+            date: date
+        },
+        success: function(res) {
+            location.reload();
+        },
+        async: false
+    });
+};
 
 function openNotifications() {
     const notificationList = getUserNotifications();
