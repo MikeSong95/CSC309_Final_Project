@@ -1,0 +1,41 @@
+<script>
+
+const submitForm = document.querySelector('#submit_btn');
+
+submitForm.addEventListener('click', submitClicked);
+function submitClicked(e){
+    e.preventDefault();
+    
+    $.post({
+        url: "/editDoctorProfile"
+    })
+}
+
+// Function to return information of current user profile
+function getCurrentUser() {
+    // SERVER_CALL Get information of user profile from server
+    const userEmail = "<%-email%>";
+
+    // SERVER_CALL Get information of user profile from server
+    $.get({
+        url:"/doctors",
+        data: {email:userEmail},
+        success: function(res) {
+            user_data = res[0];
+            // Convert assigned patients array into actual patient objects
+            user_data.assignedPatients = user_data.assignedPatients.map(function(user_data) {
+                return createPatient(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.gender,user_data.bday,user_data.hcNum, user_data.appointments, user_data.notifications, user_data.assignedDoctors, user_data.medications);
+            });
+
+            // Convert assigned patients array into actual patient objects
+            user_data.appointments = user_data.appointments.map(function(user_data) {
+                return createAppointment(user_data.name,user_data.start,user_data.end, user_data.patient, user_data.doctor);
+            });
+        },
+        async: false
+    });
+}
+
+getCurrentUser();
+
+</script>

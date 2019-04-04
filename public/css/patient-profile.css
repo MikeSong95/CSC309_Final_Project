@@ -73,7 +73,6 @@
     font-size: 15px;
     width: 568px;
     min-height: 100px
-    /* overflow: auto; */
 }
 
 .med-title {
@@ -104,4 +103,9 @@
 #book {
     max-width: 200px;
     padding: 8px;
+}
+
+.appts {
+    overflow: auto;
+    max-height: 190px;
 }

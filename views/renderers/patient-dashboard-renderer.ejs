@@ -15,10 +15,16 @@ $(function() {
     // Create a User object based off of data received from POST
     user = createPatient(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.gender,user_data.bday,user_data.hcNum, user_data.appointments, user_data.notifications, user_data.assignedDoctors, user_data.medications);
 
+    // Make the notification icon indicate there are notifications
+    if (getUserNotifications().length != 0) {
+        $('#navbar-notif-icon').attr("src","./resources/images/icons/notification-icon.png")
+    }
+
     populate_userInfo();
     populate_assignedDoctors();
     populate_medications();
     populate_appointments();
+    populate_appointments_patient_profile();
     populate_assigned_medications();
 });
 
@@ -170,13 +176,13 @@ function populate_medications() {
                                                 '<div class="dropdown-menu dropdown-menu-right">'+
                                                     '<h6 class="dropdown-header">Notification Frequency</h6>'+
                                                     '<div class="dropdown-divider"></div>'+
-                                                    '<a onclick="clearNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
+                                                    '<a onclick="clearNotification(\''+user.email+'\','+'\''+medicationList[i].name+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
                                                     '<div class="dropdown-divider"></div>'+
-                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
+                                                    '<a onclick="createNotification(\''+user.email+'\','+'\''+medicationList[i].name+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
                                                     '<div class="dropdown-divider"></div>'+
-                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
+                                                    '<a onclick="createNotification(\''+user.email+'\','+'\''+medicationList[i].name+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
                                                     '<div class="dropdown-divider"></div>'+
-                                                    '<a onclick="createNotification(\''+user.id+'\','+'\''+medicationList[i].name+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
+                                                    '<a onclick="createNotification(\''+user.email+'\','+'\''+medicationList[i].name+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
                                                 '</div>'+
                                         '</div>'+
                                     '</div>'+
@@ -192,12 +198,15 @@ function populate_appointments() {
     if (appointmentList != undefined) {
 
         for (let i = 0; i < appointmentList.length; i++) { 
-            $('#appt-list').append('<div class="item-container">'+
+            $('.patient-dashboard-appt-list').append('<div class="item-container">'+
                                         '<div class="info-container">'+
                                             '<p class="med-info">'+
                                                 '<span class="card-subsection-name">'+
                                                     appointmentList[i].getName()+
                                                 '</span>'+
+                                                '<div class="card-subsection-h1">'+
+                                                appointmentList[i].getDoctor()+
+                                            '   </div>'+
                                                 '<div class="card-subsection-h1">'+
                                                     appointmentList[i].getStartTime()+ " - " + appointmentList[i].getEndTime()+
                                                 '</div>'+
@@ -211,16 +220,68 @@ function populate_appointments() {
                                                 '<button class="btn"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">'+
                                                     '<img class="hover-pointer navbar-icon invert-color" src="./resources/images/icons/med-notification-icon.png">'+
                                                 '</button>'+
+                                                
                                                     '<div class="dropdown-menu dropdown-menu-right">'+
                                                         '<h6 class="dropdown-header">Notification Frequency</h6>'+
                                                         '<div class="dropdown-divider"></div>'+
-                                                        '<a onclick="clearNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
+                                                        '<a onclick="clearNotification(\''+user.email+'\','+'\''+appointmentList[i].getName()+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
                                                         '<div class="dropdown-divider"></div>'+
-                                                        '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
+                                                        '<a onclick="createNotification(\''+user.email+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
                                                         '<div class="dropdown-divider"></div>'+
-                                                        '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
+                                                        '<a onclick="createNotification(\''+user.email+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
                                                         '<div class="dropdown-divider"></div>'+
-                                                        '<a onclick="createNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
+                                                        '<a onclick="createNotification(\''+user.email+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
+                                                    '</div>'+
+                                            '</div>'+
+                                            '<button class="btn" aria-haspopup="true" aria-expanded="false" type="button">'+
+                                                '<img onclick="deleteAppointment(\''+appointmentList[i].getDoctor()+'\','+'\''+appointmentList[i].getMilitaryStartTime()+'\''+','+'\''+appointmentList[i].getDate()+'\''+')" class="hover-pointer navbar-icon" src="./resources/images/icons/delete-icon-sm.png">'+
+                                            '</button>'+
+                                        '</div>'+
+                                    '</div>')
+        }   
+    }
+}
+
+// Populate the "Appointments" section
+function populate_appointments_patient_profile() {
+    const appointmentList = getUserAppointments();
+    
+    if (appointmentList != undefined) {
+
+        for (let i = 0; i < appointmentList.length; i++) { 
+            $('.patient-profile-appt-list').append('<div class="item-container">'+
+                                        '<div class="info-container">'+
+                                            '<p class="med-info">'+
+                                                '<span class="card-subsection-name">'+
+                                                    appointmentList[i].getName()+
+                                                '</span>'+
+                                                '<div class="card-subsection-h1">'+
+                                                appointmentList[i].getDoctor()+
+                                            '   </div>'+
+                                                '<div class="card-subsection-h1">'+
+                                                    appointmentList[i].getStartTime()+ " - " + appointmentList[i].getEndTime()+
+                                                '</div>'+
+                                                '<div class="card-subsection-h1">'+
+                                                    appointmentList[i].getDate()+
+                                                '</div>'+
+                                            '</p>'+
+                                        '</div>'+
+                                        '<div class="med-reminder-container">'+
+                                            '<div class="btn-group">'+
+                                                '<button class="btn"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">'+
+                                                    '<img class="hover-pointer navbar-icon invert-color" src="./resources/images/icons/med-notification-icon.png">'+
+                                                '</button>'+
+                                                
+                                                    '<div class="dropdown-menu dropdown-menu-right">'+
+                                                        '<h6 class="dropdown-header">Notification Frequency</h6>'+
+                                                        '<div class="dropdown-divider"></div>'+
+                                                        '<a onclick="clearNotification(\''+user.email+'\','+'\''+appointmentList[i].getName()+'\''+')" class="dropdown-item roboto-light" href="#">None</a>'+
+                                                        '<div class="dropdown-divider"></div>'+
+                                                        '<a onclick="createNotification(\''+user.email+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'demo\''+')" class="dropdown-item roboto-light" href="#">5 Seconds (Demo)</a>'+
+                                                        '<div class="dropdown-divider"></div>'+
+                                                        '<a onclick="createNotification(\''+user.email+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'daily\''+')" class="dropdown-item roboto-light" href="#">Daily</a>'+
+                                                        '<div class="dropdown-divider"></div>'+
+                                                        '<a onclick="createNotification(\''+user.email+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
                                                     '</div>'+
                                             '</div>'+
                                         '</div>'+
@@ -243,6 +304,22 @@ function openNotifications() {
                     '<div class="dropdown-divider"></div>')
     }
 }
+
+function deleteAppointment(doctor, start, date) {
+    $.ajax({
+        type: 'DELETE',
+        url:"/patient-remove-appointment",
+        data: {
+            doctor_email: doctor,
+            start_time: start,
+            date: date
+        },
+        success: function(res) {
+            location.reload();
+        },
+        async: false
+    });
+};
 
 // *************** Patient Profile Page ****************
 
@@ -284,7 +361,7 @@ function edit_medications_form() {
                 }
                 const url = "/update-medication"
                 const request = new Request(url, {
-                    method: 'patch', 
+                    method: 'PATCH', 
                     body: JSON.stringify(data), // json input to string
                     headers: {
                         'Accept': 'application/json, text/plain, */*', //client tell server the content types they accept
@@ -297,6 +374,8 @@ function edit_medications_form() {
                     console.log('Status Code: ' +
                         response.status);
                     return;
+                    } else {
+                        location.reload();
                     }
                 })
                 .then(function() {
@@ -431,6 +510,8 @@ function delete_medication() {
                     console.log('Status Code: ' +
                         response.status);
                     return;
+                    } else {
+                        location.reload();
                     }
                 })
                 .then(function() {
@@ -464,6 +545,7 @@ function populate_assigned_medications() {
                     '<span class="med-title">'+
                         medicationList[i]['name']+
                     '</span>'+
+                    
                     '<img src="./resources/images/icons/expandplus-icon.png" class="expand" data-toggle="collapse" href="#collapseExample' + i + 
                             '" role="button" aria-expanded="false" aria-controls="collapseExample"/>' +
                     
@@ -479,6 +561,11 @@ function populate_assigned_medications() {
                         '<div class="med-notes">'+
                             medicationList[i]['description']+
                         '</div>'+
+                        " (" +
+                    '<span class="med-title">'+
+                        medicationList[i]['dosage']+
+                    '</span>'+
+                    ")" +
                     '</div>' +
                     
                 '</p>'+

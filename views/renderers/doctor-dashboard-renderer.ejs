@@ -1,5 +1,5 @@
 <script>
-    /* PATIENT DASHBOARD DOM FUNCTIONS */
+/* PATIENT DASHBOARD DOM FUNCTIONS */
 
 let user;
 let user_data;
@@ -20,6 +20,10 @@ $(function() {
 
     getCurrentUser();
     user = createDoctor(user_data._id, user_data.password, user_data.email,user_data.phone, user_data.fName, user_data.lName, user_data.specialty, user_data.address, user_data.assignedPatients, user_data.appointments, user_data.notifications);
+
+    if (getUserNotifications().length != 0) {
+        $('#navbar-notif-icon').attr("src","./resources/images/icons/notification-icon.png")
+    }
 
     getAllPatients();
 
@@ -108,7 +112,7 @@ function populate_appointments() {
                                                 appointmentList[i].getName()+
                                             '</span>'+
                                             '<div class="card-subsection-h1">'+
-                                                appointmentList[i].getDoctor().getFName()+ " " +  appointmentList[i].getDoctor().getLName() +
+                                                appointmentList[i].getPatient()+
                                             '</div>'+
                                             '<div class="card-subsection-h1">'+
                                                 appointmentList[i].getStartTime()+ " - " + appointmentList[i].getEndTime()+
@@ -135,6 +139,9 @@ function populate_appointments() {
                                                     '<a onclick="createDoctorNotification(\''+user.id+'\','+'\''+appointmentList[i].getName()+'\''+','+'\'weekly\''+')"  class="dropdown-item roboto-light" href="#">Weekly</a>'+
                                                 '</div>'+
                                         '</div>'+
+                                        '<button class="btn" aria-haspopup="true" aria-expanded="false" type="button">'+
+                                                '<img onclick="deleteDoctorAppointment(\''+appointmentList[i].getPatient()+'\','+'\''+appointmentList[i].getMilitaryStartTime()+'\''+','+'\''+appointmentList[i].getDate()+'\''+')" class="hover-pointer navbar-icon" src="./resources/images/icons/delete-icon-sm.png">'+
+                                            '</button>'+
                                     '</div>'+
                                 '</div>')
     }
@@ -164,6 +171,22 @@ function populate_patients() {
                                     '</div>')
     }
 }
+
+function deleteDoctorAppointment(patient, start, date) {
+    $.ajax({
+        type: 'DELETE',
+        url:"/doctor-remove-appointment",
+        data: {
+            patient_email: patient,
+            start_time: start,
+            date: date
+        },
+        success: function(res) {
+            location.reload();
+        },
+        async: false
+    });
+};
 
 function openNotifications() {
     const notificationList = getUserNotifications();
