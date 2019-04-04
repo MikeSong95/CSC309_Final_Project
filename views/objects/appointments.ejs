@@ -102,8 +102,15 @@ class Appointment {
     }
 }
 
+function createDateTime(time) {
+    const newDateTime = dateTime (time.year, time.month, time.date, time.time);
+    return newDateTime;
+}
+
 function createAppointment(name, start, end, patient, doctor) {
-    const newAppointment = new Appointment(name, start, end, patient, doctor);
+    const start_dateTime = createDateTime(start);
+    const end_dateTime = createDateTime(end);
+    const newAppointment = new Appointment(name, start_dateTime, end_dateTime, patient, doctor);
     return newAppointment;
 }
 
