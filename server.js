@@ -277,7 +277,7 @@ app.post("/create-doctor", (req, res) => {
     // Save patient to the database
 	doctor.save(function(err, result) {
         if (err) {
-            console.err("err", err) 
+            console.error("err", err) 
 
             // An error occurred, stop execution and return 500
             return res.status(500).send();
