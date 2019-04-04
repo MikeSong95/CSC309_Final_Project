@@ -256,7 +256,7 @@ function edit_medications_form() {
         const original_text = $(textDiv).text();
         $(textDiv).empty();
         $(textDiv).append(
-            '<textarea rows="4" cols= "75" type="text" >' +
+            '<textarea rows="4" cols= "45" type="text" >' +
             original_text +
             '</textarea>'
         );
@@ -325,7 +325,7 @@ function medication_form() {
                 '<textarea rows="1" type="text"></textarea>' +
             '</span>' +
             '<div>Description: </div>' +
-            '<textarea rows="4" cols= "75" type="text" ></textarea>' +
+            '<textarea rows="4" cols= "55" type="text" ></textarea>' +
         '</div>' +
         '<button type="button" class="btn btn-outline-light" id="new-med-button">Save and Submit</button>' +
         '<button type="button" class="btn btn-outline-light" id="cancel-new-med">Cancel</button>'
@@ -335,13 +335,41 @@ function medication_form() {
 
 function add_medication(){
     const med_form = $(this).prev()[0].children;
-    user.assignMedication({
-        name: $($(med_form)[0].children[1]).val(),
-        dosage: $($(med_form)[1].children[1]).val(),
-        description: $($(med_form)[3]).val()
+    const name = $($(med_form)[0].children[1]).val();
+    const dosage = $($(med_form)[1].children[1]).val();
+    const description = $($(med_form)[3]).val();
+    const data = {
+        name: name,
+        dosage: dosage,
+        description: description
+    }
+    user.assignMedication(data)
+
+    data.email = user.getEmail();
+
+    const url = "/add-medication"
+    const request = new Request(url, {
+        method: 'post', 
+        body: JSON.stringify(data), // json input to string
+        headers: {
+            'Accept': 'application/json, text/plain, */*', //client tell server the content types they accept
+            'Content-Type': 'application/json' // content type of client data to server 
+        },
+    });
+	fetch(request)
+    .then(function(response) {
+        if (response.status !== 200) {
+        console.log('Status Code: ' +
+            response.status);
+        return;
+        }
     })
-    populate_assigned_medications();
+    .then(function() {
+        populate_assigned_medications();
+    })
 }
+
+
 
 function delete_medication() {
     const med_container = $($($(this).parent()[0]).parent()[0]).prev()[0];
