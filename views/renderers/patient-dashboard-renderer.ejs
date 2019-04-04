@@ -15,6 +15,11 @@ $(function() {
     // Create a User object based off of data received from POST
     user = createPatient(user_data._id,user_data.password,user_data.email, user_data.phoneNum, user_data.fName, user_data.lName,user_data.gender,user_data.bday,user_data.hcNum, user_data.appointments, user_data.notifications, user_data.assignedDoctors, user_data.medications);
 
+    // Make the notification icon indicate there are notifications
+    if (getUserNotifications().length != 0) {
+        $('#navbar-notif-icon').attr("src","./resources/images/icons/notification-icon.png")
+    }
+
     populate_userInfo();
     populate_assignedDoctors();
     populate_medications();

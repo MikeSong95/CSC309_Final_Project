@@ -88,9 +88,21 @@ class Patient extends User {
 
     setNotification(notification) {
         const _this = this;
+        
         notification.intervalFunc = setInterval(function() {
             _this.notifications.push(notification);
-            $('#navbar-notif-icon').attr("src","./resources/images/icons/notification-icon.png")
+            $.post({
+                url:"/addNotification",
+                data: {
+                    email:user.email,
+                    notification: notification
+                },
+                success: function(res) {
+                    console.log("Successfully added notification")
+                    $('#navbar-notif-icon').attr("src","./resources/images/icons/notification-icon.png")
+                },
+                async: false
+            })
         }, notification.alertFreq); 
     }
 
@@ -162,7 +174,6 @@ class Doctor extends User {
     }
 
     unassignPatient(patientID) {
-        console.log(this.assignedPatients);
         for (let i = 0; i < this.assignedPatients.length; i++) {
             if (this.assignedPatients[i].getEmail() == patientID) {
                 $.ajax({
@@ -194,7 +205,18 @@ class Doctor extends User {
         const _this = this;
         notification.intervalFunc = setInterval(function() {
             _this.notifications.push(notification);
-            $('#navbar-notif-icon').attr("src","./resources/images/icons/notification-icon.png")
+            $.post({
+                url:"/addDoctorNotification",
+                data: {
+                    email:user.email,
+                    notification: notification
+                },
+                success: function(res) {
+                    console.log("Successfully added notification")
+                    $('#navbar-notif-icon').attr("src","./resources/images/icons/notification-icon.png")
+                },
+                async: false
+            })
         }, notification.alertFreq); 
     }
 
@@ -242,10 +264,21 @@ function createNotification(userID, item, freq) {
 }
 
 function removeNotification(userID, notificationNum) {
-    user.notifications.splice(notificationNum,1);
-    if (user.notifications.length === 0) {
-        $('#navbar-notif-icon').attr("src","./resources/images/icons/notification-none-icon.png")
-    }
+    $.ajax({
+        type: 'DELETE',
+        url:"/removeNotification",
+        data: {
+            notificationNum: notificationNum,
+            email: user.email
+        },
+        success: function(res) {
+            user.notifications.splice(notificationNum,1);
+            if (user.notifications.length === 0) {
+                $('#navbar-notif-icon').attr("src","./resources/images/icons/notification-none-icon.png")
+            }
+        },
+        async: true
+    })
 }
 
 function createDoctorNotification(userID, item, freq) {
@@ -270,10 +303,21 @@ function clearDoctorNotification(userID, notif) {
 }
 
 function removeDoctorNotification(userID, notificationNum) {
-    user.notifications.splice(notificationNum,1);
-    if (user.notifications.length === 0) {
-        $('#navbar-notif-icon').attr("src","./resources/images/icons/notification-none-icon.png")
-    }
+    $.ajax({
+        type: 'DELETE',
+        url:"/removeDoctorNotification",
+        data: {
+            notificationNum: notificationNum,
+            email: user.email
+        },
+        success: function(res) {
+            user.notifications.splice(notificationNum,1);
+            if (user.notifications.length === 0) {
+                $('#navbar-notif-icon').attr("src","./resources/images/icons/notification-none-icon.png")
+            }
+        },
+        async: true
+    })
 }
 
 </script>

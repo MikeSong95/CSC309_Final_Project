@@ -397,6 +397,102 @@ app.get('/doctors', (req, res) => {
 	})
 })
 
+app.post("/addNotification", (req, res) => {
+	const email = req.body.email;	// email of the patient to remove
+	const notification = req.body.notification;
+
+	// Find patient to remove doctor from
+	Patient.findOne({email: email}).then((patient) => {
+		if (!patient) {
+
+		} else {
+			patient.notifications.push(notification)
+			// Mark it as modified
+			patient.markModified('notifications');
+			// Save it
+			patient.save().then(() => {
+				res.send("Success");
+			}, (error) => {
+				res.status(400).send(error) // 400 for bad request
+			})
+		}
+	}).catch((error) => {
+		res.status(500).send(error)
+	});
+})
+
+app.post("/addDoctorNotification", (req, res) => {
+	const email = req.body.email;	// email of the patient to remove
+	const notification = req.body.notification;
+
+	// Find patient to remove doctor from
+	Doctor.findOne({email: email}).then((doctor) => {
+		if (!doctor) {
+
+		} else {
+			doctor.notifications.push(notification)
+			// Mark it as modified
+			doctor.markModified('notifications');
+			// Save it
+			doctor.save().then(() => {
+				res.send("Success");
+			}, (error) => {
+				res.status(400).send(error) // 400 for bad request
+			})
+		}
+	}).catch((error) => {
+		res.status(500).send(error)
+	});
+})
+
+app.delete("/removeNotification", (req, res) => {
+	const email = req.body.email;	// email of the patient to remove notification from
+	const num = req.body.notificationNum;
+
+	// Find patient to remove doctor from
+	Patient.findOne({email: email}).then((patient) => {
+		if (!patient) {
+
+		} else {
+			patient.notifications.splice(num, 1)
+			// Mark it as modified
+			patient.markModified('notifications');
+			// Save it
+			patient.save().then(() => {
+				res.send("Success");
+			}, (error) => {
+				res.status(400).send(error) // 400 for bad request
+			});
+		}
+	}).catch((error) => {
+		res.status(500).send(error)
+	});
+})
+
+app.delete("/removeDoctorNotification", (req, res) => {
+	const email = req.body.email;	// email of the doctor to remove notification from
+	const num = req.body.notificationNum;
+
+	// Find patient to remove doctor from
+	Doctor.findOne({email: email}).then((doctor) => {
+		if (!doctor) {
+
+		} else {
+			doctor.notifications.splice(num, 1)
+			// Mark it as modified
+			doctor.markModified('notifications');
+			// Save it
+			doctor.save().then(() => {
+				res.send("Success");
+			}, (error) => {
+				res.status(400).send(error) // 400 for bad request
+			});
+		}
+	}).catch((error) => {
+		res.status(500).send(error)
+	});
+})
+
 app.delete("/removeAssignedPatient", (req, res) => {
 	const patient_email = req.body.patient_email;	// email of the patient to remove
 	const doctor_email = req.body.doctor_email;		// doctor to remove patient from
