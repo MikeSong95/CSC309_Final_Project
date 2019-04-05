@@ -178,38 +178,38 @@ app.post("/edit-patient", (req, res) => {
 		if (!patient) {
 			res.status(404).send();
 		} else {
-			if (data.password != undefined) {
+			if (data.password != "") {
 				console.log("modified password");
 				patient.password = data.password;		
 				// Mark it as modified
 				patient.markModified('password');
 			} 
-			if (data.email != undefined) {
+			if (data.email != "") {
 				patient.email = data.email;
 				// Mark it as modified
 				patient.markModified('email');
 			}
-			if (data.phoneNum != undefined) {
+			if (data.phoneNum != "") {
 				patient.phoneNum = data.phoneNum;
 				// Mark it as modified
 				patient.markModified('phoneNum');
 			}
-			if (data.fName != undefined) {
+			if (data.fName != "") {
 				patient.fName = data.fName;
 				// Mark it as modified
 				patient.markModified('fName');
 			}
-			if (data.lName != undefined) {
+			if (data.lName != "") {
 				patient.lName = data.lName;
 				// Mark it as modified
 				patient.markModified('lName');
 			}
-			if (data.gender != undefined) {
+			if (data.gender != "") {
 				patient.gender = data.gender;
 				// Mark it as modified
 				patient.markModified('gender');
 			}
-			if (data.hcNum != undefined) {
+			if (data.hcNum != "") {
 				patient.hcNum = data.hcNum;
 				// Mark it as modified
 				patient.markModified('hcNum');
