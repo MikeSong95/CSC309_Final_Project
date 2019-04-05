@@ -89,14 +89,16 @@
                 <div class="form-group">
                   <label class="col-md-3" for="password_2">Confirm password:</label>
                   <div class="col-md-8">
-                    <input id="password_2" class="form-control" type="password">
+                    <input id="password_2" class="form-control" type="password" onblur="validate()">
                   </div>
+                </div>
+                <div class ="col-md-3" id="msg">
+                    
                 </div>
                 <div class="form-group">
                   <label class="col-md-3"></label>
-                  <div class="col-md-8">
-                     
-                        <input id="submit_btn" type="submit" class="btn btn-primary" value="Submit">
+                  <div class="col-md-8">   
+                    <input id="submit_btn" type="submit" class="btn btn-primary" value="Submit">
                   </div>
                 </div>
               </form>
@@ -147,13 +149,15 @@
                 <div class="form-group">
                   <label class="col-md-3" for="password_2">Confirm password:</label>
                   <div class="col-md-8">
-                    <input id="password_2" class="form-control" type="password">
+                    <input id="password_2" class="form-control" type="password" onblur="validate()">
                   </div>
+                </div>
+                <div class ="col-md-3" id="msg">
+                  
                 </div>
                 <div class="form-group">
                   <label class="col-md-3"></label>
                   <div class="col-md-8">
-                     
                         <input id="submit_btn" type="submit" class="btn btn-primary" value="Submit">
                   </div>
                 </div>
@@ -164,11 +168,24 @@
       </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-
    <script>
+      function validate(){
+        let password1 = document.getElementById("password");
+        let password2 = document.getElementById("password_2");
+        let submitButton = document.getElementById("submit_btn");
+        
+        if(password1.value==password2.value){
+          submitButton.disabled = false;
+          return;
+        } 
+        else{
+          document.getElementById("msg").innerHTML = "Password do not match!";
+          submitButton.disabled = true;
+        }
+      }
+
       $(function() {
         $('#create-doctor-form').hide();
-        
       });
       function toggle(e) {
         console.log(e.target.id);
