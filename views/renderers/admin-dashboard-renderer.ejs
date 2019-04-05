@@ -57,6 +57,7 @@ function getAssignedDoctors() {
     return user.getDoctors();
 }
 */
+
 // Populates the User Profile information
 // Convert to jQuery idk why I wrote this in vanilla JS
 function populate_userInfo() {
@@ -86,7 +87,15 @@ function populate_userInfo() {
 // Convert to jQuery idk why I wrote this in vanilla JS
 function populate_assignedDoctors() {
     // Will be replaced by user.getAssignedDoctors() eventually when server functionality is added
-    const doctors = user.getDoctors(); 
+
+    if (user.getDoctors) {
+      var doctors = user.getDoctors(); 
+      console.log("defined");
+    } else {
+      var doctors = [];
+
+      console.log("defined");
+    }
 
     const assignedDoctorSection = document.querySelector('#assigned-doctors');
 
@@ -106,11 +115,14 @@ function populate_assignedDoctors() {
         // Create doctor name / specialty element
         const nameContainer = document.createElement('div');
         nameContainer.setAttribute('class', 'doctor-name-container card-subsection-notes');
-        const nameNode = document.createTextNode("Dr. " + doctors[i].fName + " " + doctors[i].lName);
+        let txt = doctors ? "Dr. " + doctors[i].fName + " " + doctors[i].lName : "N/A";
+console.log(doctors[i].fName);
+        const nameNode = document.createTextNode(txt);
         const nameElement = document.createElement('strong');
         nameElement.appendChild(nameNode);
         nameElement.appendChild(document.createElement('br'));
-        const specialtyNode = document.createTextNode(doctors[i].specialty);
+        const specialty = doctors ? doctors[i].specialty : "N/A";
+        const specialtyNode = document.createTextNode(specialty);
         const specialtyElement = document.createElement('span');
         specialtyElement.setAttribute('class', 'font-12');
         specialtyElement.appendChild(specialtyNode);
