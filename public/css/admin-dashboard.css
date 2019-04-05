@@ -1,18 +1,18 @@
 @font-face {
     font-family: domine;
-    src: url(../resources/fonts/Domine/Domine-Regular.ttf);
+    src: url(/resources/fonts/Domine/Domine-Regular.ttf);
 }
 @font-face {
     font-family: domine-bold;
-    src: url(../resources/fonts/Domine/Domine-Bold.ttf);
+    src: url(/resources/fonts/Domine/Domine-Bold.ttf);
 }
 @font-face {
     font-family: roboto-light;
-    src: url(../resources/fonts/Roboto/roboto-light.ttf);
+    src: url(/resources/fonts/Roboto/Roboto-Light.ttf);
 }
 @font-face {
     font-family: roboto-bold;
-    src: url(../resources/fonts/Roboto/roboto-bold.ttf);
+    src: url(../public/resources/fonts/Roboto/roboto-bold.ttf);
 }
 
 html, body {

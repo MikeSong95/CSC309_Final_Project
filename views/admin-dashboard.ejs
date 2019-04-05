@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+    <meta charset="utf-8">
+    <title>TITLE</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> 
+
+    <!-- Index CSS -->
+    <link rel="stylesheet" type="text/css" href="../css/admin-dashboard.css">
+ </head>
+ <body>
+    <div id="background">
+        <img src="../resources/images/bg.jpg" class="stretch" alt="" />
+    </div>
+    <!-- Dashboard Navbar -->
+    <nav class="navbar">
+        <a class="navbar-brand" href="#" id="sidebar-toggle">
+            <img class="navbar-logo" src="../resources/images/icons/logo-icon.png" width="40" height="40" alt="">
+        </a>
+        <ul class="d-flex justify-content-end align-items-center nav-icon">
+            <li class="nav-item">
+                <div class="btn-group">
+                    <button class="btn"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">
+                        <img id="navbar-notif-icon" class="navbar-icon invert-color" src="../resources/images/icons/notification-none-icon.png">
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <!-- Populate with notification information -->
+                        <a class="dropdown-item roboto-light" href="#">These will be the notifications</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item roboto-light" href="#">This will be another notification</a>
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <img class="navbar-icon" src="../resources/images/icons/calendar-icon.png">
+                </a>
+            </li>
+            <li class="nav-item">
+                <div class="btn-group">
+                    <button class="btn"  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" type="button">
+                            <img class="navbar-icon" src="../resources/images/icons/stockprofile-icon.png">
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item roboto-light" href="#">Profile</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item roboto-light" href="./index.html">Log Out</a>
+                        </div>
+                </div>
+            </li>
+        </ul>
+    </nav>
+
+    <div id="page-wrapper">
+
+      <!-- Sidebar -->
+      <div id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+          <form autocomplete="off" action="/action_page.php">
+            <div class="autocomplete" style="width:400px; white; background-color: white;">
+              <input id="myInput" type="text" name="myCountry" placeholder="Username" style="border-color: white; width:400px;">
+            </div>
+          </form>
+        </ul>
+      </div>
+
+      <div id="dashboard">
+          <div class="container-fluid d-flex justify-content-around align-items-center">
+              <div class="row card-deck">
+                  <div id="col-lg-12 profile-card" class="card">
+                      <img src="../resources/images/mark.jpeg" class="profile-picture" alt="">
+                      <div class="card-body">
+                          <br>
+                          <div id="user-name" class="center-text">
+                              
+                          </div>
+                          <hr>
+                          <p>Assigned Doctors</p>
+                          <div id="assigned-doctors">
+                          </div>
+                          <hr>
+                          <p>Contact Info</p>
+                          <div class="contact-info center-text">
+                          
+                          </div>
+                          <hr>
+                          <p>Change Password / Account Deletion</p>
+                          <div class="account-changes center-text">
+                            <div class="container-fluid">
+                              <form>
+                                <div class="form-group">
+                                  <label for="newPwd">New password:</label>
+                                  <input type="password" class="form-control form-control-sm" id="newPwd" placeholder="Enter new password" name="newPwd">
+
+                                  <label for="verifyPwd">Verify password:</label>
+                                  <input type="password" class="form-control form-control-sm" id="verifyPwd" placeholder="Verify password" name="verifyPwd">
+                                </div>
+                                <button type="submit" class="btn btn-outline-light">Submit</button>
+                                <button type="submit" class="btn btn-outline-light">Delete Account</button>
+                              </form>
+
+                            </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <% include ./objects/users %>
+    <% include ./renderers/admin-dashboard-renderer %>
+</body>
+</html>

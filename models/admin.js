@@ -1,9 +1,9 @@
-/* User model */
+/* Admin model */
 const mongoose = require('mongoose')
 const validator = require('validator')
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcrypt')
 
-const UserSchema = new mongoose.Schema({
+const AdminSchema = new mongoose.Schema({
         email: {
                 type: String,
                 required: true,
@@ -20,10 +20,6 @@ const UserSchema = new mongoose.Schema({
                 required: true,
                 minlength: [6, "Your password must be at least 6 characters long. Please try another."]
         },
-	address: {
-		type: String,
-		required: [true, "Missing address."]
-	},
 	phoneNum: {
 		type: String,
 		required: true,
@@ -43,8 +39,8 @@ const UserSchema = new mongoose.Schema({
 	}
 })
 
-// Our own user finding function 
-UserSchema.statics.findByEmailPassword = function(email, password) {
+// Our own admin finding function 
+AdminSchema.statics.findByEmailPassword = function(email, password) {
         const User = this
 
         return User.findOne({email: email}).then((user) => {
@@ -64,8 +60,8 @@ UserSchema.statics.findByEmailPassword = function(email, password) {
         })
 }
 
-// This function runs before saving user to database
-UserSchema.pre('save', function(next) {
+// This function runs before saving admin to database
+AdminSchema.pre('save', function(next) {
         const user = this
 
         if (user.isModified('password')) {
@@ -78,9 +74,8 @@ UserSchema.pre('save', function(next) {
         } else {
                 next();
         }
-
 })
 
-const User = mongoose.model('User', UserSchema)
+const Admin = mongoose.model('Admin', AdminSchema)
 
-module.exports = { User }
+module.exports = { Admin }
