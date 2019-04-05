@@ -133,13 +133,14 @@ html, body {
 }
 
 .doctor-picture {
-    height:40px;
-    width:38px;
+    float:left;
+    height:32px;
+    width:30px;
 }
 
 .doctor-name-container{
     float:right;
-    width:140px;
+    width:100px;
     margin:0;
     padding:0;
 }
@@ -167,14 +168,14 @@ html, body {
     font-family:roboto-light;
     margin:0;
     margin-left: 5px;
-    font-size:15px;
+    font-size:12px;
 }
 
 .card-subsection-h1 {
     font-family:roboto-light;
     margin:0;
     margin-left:5px;
-    font-size: 15px;
+    font-size: 12px;
 }
 
 .profile-picture {
@@ -182,7 +183,7 @@ html, body {
 	width:150px;
     border-radius: 50%;
     border: 2px solid white;
-    margin-left:48px;
+    margin-left:30px;
     margin-top:15px;
 }
 

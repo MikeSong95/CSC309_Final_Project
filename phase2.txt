@@ -1,0 +1,20 @@
+
+Patient-profile page (Doctor view)
+- Accessed when a doctor user chooses a patient from the doctor dashboard, where
+they can view patient's information.
+- Doctor can add and change medications, and book appointments with the patient.
+- Clicking on Add medication button, doctor inputs the fields   
+    - Save and Submit adds the medication to the patient's medications array,
+    through "/add-medication" post request.
+- Clicking on plus sign next to a medication name expands further description, and 
+two buttons
+    - Update Medication button: can update description in textfield. When Save and Submit
+    is clicked, then saves the new update to patient's medication array through
+    "/update-medication" patch request.
+    - Delete Medication button: can delete medication from patient's medication array 
+    through "/delete-medication" delete request.
+- Booking appointment form: when book appointment is clicked, information from a 
+single appointment is saved in both patient's and doctor's appointments array 
+through "/book-appointment" post request 
+- Back button: brings doctor back to their doctor-dashboard through "/doctor-dashboard"
+get request
