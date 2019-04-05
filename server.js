@@ -291,6 +291,39 @@ app.post("/edit-doctor", (req, res) => {
 	});
 })
 
+// Update user password
+app.patch('/updateUserPassword', (req, res) => {
+	console.log("Updating user password");
+        console.log("User email: " + req.body.email);
+	let User;
+	if (req.body.usertype === "admin") {
+		User = Admin;
+	} else if (req.body.usertype === "patient") {
+		User = Patient;
+	} else if (req.body.usertype === "doctor") {
+		User = Doctor;
+    	}
+
+	User.findOne({ email: req.body.email }).then((user) => {
+		if (!user) {
+			res.status(404).send("User not found.");
+		} else {
+			user.password = req.body.password;
+			// Mark it as modified
+			user.markModified('password');
+
+			// Save it
+			user.save().then(() => {
+				res.redirect('/admin-dashboard');
+			}, (error) => {
+				res.status(400).send(error) // 400 for bad request
+			})
+		}
+	}).catch((error) => {
+		res.status(500).send();
+	});
+});
+
 /* GET Requests */
 // Login
 app.get("/login", (req,res) => {
@@ -566,6 +599,35 @@ app.post("/addDoctorNotification", (req, res) => {
 		res.status(500).send(error)
 	});
 })
+
+app.delete("/deleteAccount", (req, res) => {
+	let User;
+	const email = req.body.email;
+
+	if (req.body.usertype === "admin") {
+		User = Admin;
+	} else if (req.body.usertype === "patient") {
+		User = Patient;
+	} else if (req.body.usertype === "doctor") {
+		User = Doctor;
+    	}
+
+	User.deleteOne({ "email": email }).then((user) => {
+		if (!user) {
+			res.status(404).send("User not found.");
+		} else {
+			console.log("Account account " + email + " deleted");
+			// Save it
+			user.save().then(() => {
+				res.redirect('/admin-dashboard');
+			}, (error) => {
+				res.status(400).send(error) // 400 for bad request
+			})
+		}
+	}).catch((error) => {
+		res.status(500).send();
+	});
+});
 
 app.delete("/removeNotification", (req, res) => {
 	const email = req.body.email;	// email of the patient to remove notification from

@@ -2,7 +2,7 @@
 <html lang="en">
  <head>
     <meta charset="utf-8">
-    <title>TITLE</title>
+    <title>UTorMed: Admin Dashboard</title>
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> 
 
@@ -45,7 +45,7 @@
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item roboto-light" href="#">Profile</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item roboto-light" href="./index.html">Log Out</a>
+                            <a class="dropdown-item roboto-light" href="logout">Log Out</a>
                         </div>
                 </div>
             </li>
@@ -88,7 +88,7 @@
                           <p>Change Password / Account Deletion</p>
                           <div class="account-changes center-text">
                             <div class="container-fluid">
-                              <form id= "accChgForm" method="GET" action="/deleteAccount">
+                              <form id= "accChgForm">
                                 <div class="form-group">
                                   <label for="newPwd">New password:</label>
                                   <input type="password" class="form-control form-control-sm" id="newPwd" placeholder="Enter new password" name="newPwd">
@@ -99,7 +99,8 @@
                                 <button type="button" class="btn btn-outline-light" id="chgPwd">Submit</button>
                                 <button type="submit" class="btn btn-outline-light" id="delAcc">Delete Account</button>
                               </form>
-
+                              <div id="statusMsg">
+                              </div>
                             </div>
                           </div>
                       </div>

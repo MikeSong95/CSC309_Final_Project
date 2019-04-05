@@ -67,8 +67,10 @@ Routes:
 GET /allPatients to get all patients
 GET /allDoctors to get all doctors
 GET /allAdmins to get all admins
+PATCH /updateUserPassword to update the password for a particular user acount
+DELETE /deleteAccount to delete a particular user account
 
-Admin are manually added through the backend DBMS and the admin dashboard is accessed by logging
+Admins are manually added through the backend DBMS and the admin dashboard is accessed by logging
 in with admin credentials via the login page.
 
 0.	Use the following credential to sign-in at index.html:

@@ -13,13 +13,12 @@ $(function() {
     $().popover({container: 'body'})
 
     getAllUsers();
-    console.log(userList);
     getCurrentUser(userList[0].getEmail());
-    console.log(user);
     populate_userInfo();
     populate_assignedDoctors();
 
-    /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+    /* initiate the autocomplete function on the "myInput" element, and
+      pass along the countries array as possible autocomplete values: */
     autocomplete(document.getElementById("myInput"), userList);
 
 
@@ -29,6 +28,7 @@ $(function() {
     });
 
     $("#chgPwd").click(change_password);
+    $("#delAcc").click(delete_account);
 });
 
 // Function to return information of current user profile
@@ -38,26 +38,6 @@ function getCurrentUser(email) {
         return account.getEmail() == email;
         })[0];
 }
-/*
-// Function to get assigned doctors of current user
-// Will be replaced by user.getAssignedDoctors() eventually when server functionality is added
-function getAssignedDoctors() {
-    // Make fake doctors for now 
-    createDoctor(0, 'password', 'doctor1@gmail.com', '(123) 456 - 7890', 'Doc', 'Tor', 'Cardiology', '123 Fake Street');
-    createDoctor(1, 'password', 'doctor2@gmail.com', '(123) 456 - 7890', 'Some', 'Doctor', 'Neurology', '123 Fake Avenue');
-    createDoctor(2, 'password', 'doctor3@gmail.com', '(123) 456 - 7890', 'Test', 'Name', 'ENT', '123 Fake Crecent');
-    createDoctor(3, 'password', 'doctor4@gmail.com', '(123) 456 - 7890', 'Test', 'Name 2', 'General Surgeon' , '123 Fake Crecent');
-    
-    // Hard-code assign them to current user
-    // Note: Assigning patients is done from doctor's side
-    doctorList[0].assignPatient(user);
-    doctorList[1].assignPatient(user);
-    doctorList[2].assignPatient(user);
-    doctorList[3].assignPatient(user);
-
-    return user.getDoctors();
-}
-*/
 
 // Populates the User Profile information
 // Convert to jQuery idk why I wrote this in vanilla JS
@@ -88,23 +68,19 @@ function populate_userInfo() {
 // Convert to jQuery idk why I wrote this in vanilla JS
 function populate_assignedDoctors() {
     // Will be replaced by user.getAssignedDoctors() eventually when server functionality is added
+    var doctors;
 
     if (user.getDoctors) {
-      var doctors = user.getDoctors(); 
-      console.log("defined");
+      doctors = user.getDoctors(); 
     } else {
-      var doctors = [];
-
-      console.log("defined");
+      doctors = [];
     }
 
     const assignedDoctorSection = document.querySelector('#assigned-doctors');
-
     for (let i = 0; i < doctors.length; i++) {
         // Create doctor container element
         const mainContainer = document.createElement('div');
         mainContainer.setAttribute('class', 'doctor-container');
-
         // Create doctor picture element
         const pictureContainer = document.createElement('div');
         pictureContainer.setAttribute('class', 'doctor-picture-container');
@@ -117,7 +93,6 @@ function populate_assignedDoctors() {
         const nameContainer = document.createElement('div');
         nameContainer.setAttribute('class', 'doctor-name-container card-subsection-notes');
         let txt = doctors ? "Dr. " + doctors[i].fName + " " + doctors[i].lName : "N/A";
-console.log(doctors[i].fName);
         const nameNode = document.createTextNode(txt);
         const nameElement = document.createElement('strong');
         nameElement.appendChild(nameNode);
@@ -267,20 +242,72 @@ function cancel_new_medication() {
 
 function change_password() {
   
-  let formGroupElem = $(".form-group");
   let newPwd = $("#newPwd").val();
   let verifyPwd = $("#verifyPwd").val();
+  let statusMsg = $("#statusMsg");
+  let userType;
 
   if (newPwd != verifyPwd) {
-    $("#accChgForm").append(
-    '<div class="alert alert-danger alert-dismissible fade in">' +
-    '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
-    '<strong>Password mismatch</strong>' +
+/* Bootstrap Alerts wont' appear
+    $(".account-changes").append(
+    '<div class="container">' +
+      '<div class="alert alert-danger alert-dismissible fade in">' +
+        '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
+        '<strong>Password mismatch</strong>' + "Some test" +
+      '</div>' +
     '</div>'
     );
+*/
+    statusMsg.html('Password mismatch!');
+  } else {
+    if (user instanceof Patient) {
+      userType = "patient";
+    }
+    else if (user instanceof Doctor) {
+      userType = "doctor";
+    } 
+    else {
+      userType = "admin";
+    }
+
+    // Update the password
+    $.ajax({
+      url: '/updateUserPassword',
+      type: "PATCH",
+      datatype: "json",
+      contentType : 'application/json',
+      data: JSON.stringify({"email": user.getEmail(), "password": newPwd, "usertype": userType}),
+      success: statusMsg.html('Password changed!'),
+    });
   }
-  // Update the password
 }
+
+function delete_account() {
+    let statusMsg = $("#statusMsg");
+    let userType;
+
+    if (user instanceof Patient) {
+      userType = "patient";
+    }
+    else if (user instanceof Doctor) {
+      userType = "doctor";
+    } 
+    else {
+      userType = "admin";
+    }
+
+    // Update the password
+    $.ajax({
+      url: '/deleteAccount',
+      type: "DELETE",
+      datatype: "json",
+      contentType : 'application/json',
+      data: JSON.stringify({"email": user.getEmail(), "usertype": userType}),
+      success: statusMsg.html('Account deleted!'),
+    });
+}
+
+
 
 /*** Autocomplete ***/
 
@@ -308,10 +335,10 @@ function autocomplete(inp, arr) {
           /*create a DIV element for each matching element:*/
           b = document.createElement("DIV");
           /*make the matching letters bold:*/
-          b.innerHTML = "<strong>" + arr[i].lName.substr(0, val.length) + "</strong>";
+          b.innerHTML = arr[i].fName + " " + "<strong>" + arr[i].lName.substr(0, val.length) + "</strong>";
           b.innerHTML += arr[i].lName.substr(val.length);
           /*insert a input field that will hold the current array item's value:*/
-          b.innerHTML += "<input type='hidden' value='" + arr[i].lName + "'>";
+          b.innerHTML += "<input type='hidden' value='" + arr[i].fName + " " + arr[i].lName + "'>";
 
           let index = i;
           /*execute a function when someone clicks on the item value (DIV element):*/
@@ -319,16 +346,41 @@ function autocomplete(inp, arr) {
               /*insert the value for the autocomplete text field:*/
               getCurrentUser(arr[index].getEmail());          
               inp.value = this.getElementsByTagName("input")[0].value; // Call populate_UserInfo() here.
-//
               populate_userInfo();
+              populate_assignedDoctors();
               /*close the list of autocompleted values,
               (or any other open lists of autocompleted values:*/
               closeAllLists();
           });
           a.appendChild(b);
+        } else {
+          if (arr[i].fName.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            /*create a DIV element for each matching element:*/
+            b = document.createElement("DIV");
+            /*make the matching letters bold:*/
+            b.innerHTML = "<strong>" + arr[i].fName.substr(0, val.length) + "</strong>";
+            b.innerHTML += arr[i].fName.substr(val.length); + " " + arr[i].lName;
+            /*insert a input field that will hold the current array item's value:*/
+            b.innerHTML += "<input type='hidden' value='" + arr[i].fName + " " +  arr[i].lName + "'>";
+
+            let index = i;
+            /*execute a function when someone clicks on the item value (DIV element):*/
+            b.addEventListener("click", function(e) {
+                /*insert the value for the autocomplete text field:*/
+                getCurrentUser(arr[index].getEmail());          
+                inp.value = this.getElementsByTagName("input")[0].value; // Call populate_UserInfo() here.
+                populate_userInfo();
+                populate_assignedDoctors();
+                /*close the list of autocompleted values,
+                (or any other open lists of autocompleted values:*/
+                closeAllLists();
+            });
+            a.appendChild(b);
+          }
         }
       }
   });
+
   /*execute a function presses a key on the keyboard:*/
   inp.addEventListener("keydown", function(e) {
       var x = document.getElementById(this.id + "autocomplete-list");

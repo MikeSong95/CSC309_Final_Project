@@ -12,7 +12,7 @@
 }
 @font-face {
     font-family: roboto-bold;
-    src: url(../public/resources/fonts/Roboto/roboto-bold.ttf);
+    src: url(/resources/fonts/Roboto/Roboto-Bold.ttf);
 }
 
 html, body {
@@ -73,7 +73,7 @@ html, body {
 }
 
 .card-body {
-    height:640px;
+    height:690px;
     overflow:auto;
     padding-top:0px;
 }
@@ -292,6 +292,11 @@ input[type=submit] {
   cursor: pointer;
 }
 
+#statusMsg {
+  margin-top: 12px;
+  color: red;
+}
+
 .autocomplete-items {
   position: absolute;
   border: 1px solid #d4d4d4;
@@ -321,3 +326,5 @@ input[type=submit] {
   background-color: DodgerBlue !important; 
   color: #ffffff; 
 }
+
+
