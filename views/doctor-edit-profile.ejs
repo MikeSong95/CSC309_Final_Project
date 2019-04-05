@@ -44,7 +44,7 @@
             <div class="col-md-9">
               <h4>Edit Profile</h4>
               <h5 class="alert alert-primary">Fill in fields you would like to edit and click Submit</h5>
-              <form id="create-patient-form" class="form-horizontal" action="/edit-patient" method="POST" role="form">
+              <form id="create-patient-form" class="form-horizontal" action="/edit-doctor" method="POST" role="form">
                 <div class="form-group">
                   <label class="col-lg-3" for="fname">First Name:</label>
                   <div class="col-lg-8">
@@ -69,18 +69,18 @@
                       <input id="phone"  name="phone"class="form-control" type="text">
                     </div>
                   </div>
-                  <div class="form-group">
-                        <label class="col-md-3" for="gender">Gender:</label>
-                        <div class="col-md-8">
-                          <input id="gender" name="gender" class="form-control" type="text">
-                        </div>
-                      </div>
-                      <div class="form-group">
-                           <label class="col-md-3" for="hcnum">Health Card Number:</label>
-                           <div class="col-md-8">
-                             <input id="hcnum" name="hcnum" class="form-control" type="text">
-                           </div>
-                         </div>
+                <div class="form-group">
+                  <label class="col-md-3" for="address">Address:</label>
+                    <div class="col-md-8">
+                      <input id="address" name="address" class="form-control" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                  <label class="col-md-3" for="specialty">Specialty:</label>
+                    <div class="col-md-8">
+                      <input id="specialty" name="specialty" class="form-control" type="text">
+                    </div>
+                </div>
                 <div class="form-group">
                   <label class="col-md-3" for="password">Password:</label>
                   <div class="col-md-8">
