@@ -228,6 +228,66 @@ app.post("/edit-patient", (req, res) => {
 	});
 })
 
+app.post("/edit-doctor", (req, res) => {
+	console.log("Editing doctor")
+	const data = {
+		password: req.body.password,
+		email: req.body.email, 
+		phoneNum:req.body.phone,
+		fName:req.body.fname,
+		lName:req.body.lname,
+		address:req.body.address,
+		specialty:req.body.specialty
+	}
+	
+	// Otherwise, findById
+	Doctor.findOne({email:req.session.email}).then((doctor) => {
+		if (!doctor) {
+			res.status(404).send();
+		} else {
+			if (data.password != "") {
+				doctor.password = data.password;		
+				// Mark it as modified
+				doctor.markModified('password');
+			} 
+			if (data.email != "") {
+				doctor.email = data.email;
+				// Mark it as modified
+				doctor.markModified('email');
+			}
+			if (data.phoneNum != "") {
+				doctor.phoneNum = data.phoneNum;
+				// Mark it as modified
+				doctor.markModified('phoneNum');
+			}
+			if (data.fName != "") {
+				doctor.fName = data.fName;
+				// Mark it as modified
+				doctor.markModified('fName');
+			}
+			if (data.lName != "") {
+				doctor.lName = data.lName;
+				// Mark it as modified
+				doctor.markModified('lName');
+			}
+			if (data.address != "") {
+				doctor.address = data.address;
+				// Mark it as modified
+				doctor.markModified('address');
+			}
+
+			// Save it
+			doctor.save().then(() => {
+				res.redirect('/doctor-dashboard?email=' + req.session.email)
+			}, (error) => {
+				res.status(400).send(error) // 400 for bad request
+			})
+		}
+	}).catch((error) => {
+		res.status(500).send();
+	});
+})
+
 /* GET Requests */
 // Login
 app.get("/login", (req,res) => {
