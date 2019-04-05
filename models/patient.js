@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const AppointmentModel = require('./appointment');
 const NotificationModel = require('./notification');
 const DoctorModel = require('./doctor');
@@ -45,7 +45,7 @@ PatientSchema.statics.findByEmailPassword = function(email, password) {
 // This function runs before saving user to database
 PatientSchema.pre('save', function(next) {
 	const user = this
-
+	
 	if (user.isModified('password')) {
 		bcrypt.genSalt(10, (error, salt) => {
 			bcrypt.hash(user.password, salt, (error, hash) => {
