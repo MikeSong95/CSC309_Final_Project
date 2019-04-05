@@ -4,17 +4,21 @@
   "description": "",
   "main": "server.js",
   "dependencies": {
-    "bcrypt": "^3.0.5",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "crypto-js": "^3.1.9-1",
     "ejs": "^2.6.1",
     "express": "^4.16.4",
     "express-session": "^1.15.6",
     "heroku": "^7.22.7",
+    "jsonwebtoken": "^8.4.0",
     "mongod": "^2.0.0",
     "mongodb": "^3.2.2",
     "mongoose": "^5.4.21",
+    "node": "^11.12.0",
     "node-gyp": "^3.8.0",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "validator": "^10.9.0"
   },
   "devDependencies": {},
   "scripts": {
