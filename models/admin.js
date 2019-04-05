@@ -14,7 +14,7 @@ const AdminSchema = new mongoose.Schema({
         password: {
                 type: String,
                 required: true,
-                minlength: [6, "Your password must be at least 6 characters long. Please try another."]
+                minlength: [5, "Your password must be at least 6 characters long. Please try another."]
         },
 	phoneNum: {
 		type: String,
