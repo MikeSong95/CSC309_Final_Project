@@ -18,3 +18,44 @@ single appointment is saved in both patient's and doctor's appointments array
 through "/book-appointment" post request 
 - Back button: brings doctor back to their doctor-dashboard through "/doctor-dashboard"
 get request
+
+Patient-dashboard page:
+- Routes:
+1. GET /patients to populate page with the user information
+2. DELETE /removeAppointment to delete an appointment. This will also delete the corresponding appointment of the doctor that appointment was with
+3. POST /addNotification to store notifications so they persist when the user logs out / logs back in
+4. GET /edit-patient-profile redirects users to the edit profile page for patients
+5. GET /logout will destroy the session and send user back to the index page.
+
+- Accessed when a patient logs in. It is the main landing page for patients.
+- Can view their information, including doctors they are assigned to, contact details, etc.
+- Assigned medications will appear under the "Medications" card.
+- Users can set a notification for each medication to remind themselves to take it.
+- Upcoming appointments will appear under the "Appointments" card. Users can delete appointments, or set notifications to remind themselves.
+
+Patient-dashboard page:
+- Routes:
+1. GET /doctors to populate page with the user information
+2. DELETE /removeAppointment to delete an appointment. This will also delete the corresponding appointment of the patient that appointment was with
+3. GET /addNotification to store notifications so they persist when the user logs out / logs back in
+4. GET /patients to populate the "Add patients" modal with all of the patients not assigned to that doctor
+5. GET /edit-doctor-profile redirects users to the edit profile page for doctors
+6. GET /logout will destroy the session and send user back to the index page.
+7. GET /patient-profile to redirect doctor to the patient's profile page depending on whcih patient they click on
+8. POST /assignPatient to add a patient to the doctor. This will also update the patient information with the corresponding doctor
+9. DELETE /removePatient to remove a patient from the doctor's list of assigned patients
+
+- Accessed when a doctor logs in. It is the main landing page for doctors.
+- Can view their upcoming appointments, as well as the list of their assigned patients.
+- Can click the + button in the Patients card to assign patients to themselves.
+- Type into the search bar to search for specific patients assigned to you
+- Upcoming appointments will appear under the "Appointments" card. Users can delete appointments, or set notifications to remind themselves.
+- Clicking on a patient in the assigned patients list will route you to their profile page
+- Clicking the X beside a patient will remove them from the list of assigned patients. It will also remove the doctor from that patient's list of assigned doctors.
+
+Patient / doctor edit page:
+
+For patients and doctors, you can edit your information by clicking top right icon with human shape, then clicking on profile. 
+You can fill in information that you would like to modify, and some of these values are different for patients and doctors. For example, patient can edit their health card number and doctors can edit their address and specialty field. 
+Once submit button is pressed, it will make POST request then update data regarding input. 
+These routes are only accessible when session is present.

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const AppointmentModel = require('./appointment');
 const NotificationModel = require('./notification');
 const PatientModel = require('./patient');
@@ -17,7 +17,6 @@ const DoctorSchema = new mongoose.Schema({
     appointments: [Object],    // Empty list of appointment IDs
     assignedPatients: [Object] // Empty list of assigned doctors
 });
-
 
 // Our own student finding function 
 DoctorSchema.statics.findByEmailPassword = function(email, password) {

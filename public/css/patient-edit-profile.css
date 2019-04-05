@@ -77,3 +77,7 @@ html, body {
 h4, label{
     color: white;
 }
+
+#msg{
+    color: red;
+}
