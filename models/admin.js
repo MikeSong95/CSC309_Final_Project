@@ -10,10 +10,6 @@ const AdminSchema = new mongoose.Schema({
                 minlength: 1,
                 trim: true, // trim whitespace
                 unique: true,
-                validate: {
-                        validator: validator.isEmail,
-                        message: 'Not valid email.'
-                }
         },
         password: {
                 type: String,
