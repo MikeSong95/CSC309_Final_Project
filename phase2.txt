@@ -59,3 +59,20 @@ For patients and doctors, you can edit your information by clicking top right ic
 You can fill in information that you would like to modify, and some of these values are different for patients and doctors. For example, patient can edit their health card number and doctors can edit their address and specialty field. 
 Once submit button is pressed, it will make POST request then update data regarding input. 
 These routes are only accessible when session is present.
+
+Admin-dashboard:
+
+Routes:
+GET /allPatients to get all patients
+GET /allDoctors to get all doctors
+GET /allAdmins to get all admins
+
+Admin are manually added through the backend DBMS and the admin dashboard is accessed by logging
+in with admin credentials via the login page.
+
+0.	Use the following credential to sign-in at index.html:
+		Username: admin
+		Password: admin
+1.	Click the blue icon in the top left of the screen. A search bar will appear.
+2.	The search bar allows admins to search for users. Type “A” in the search bar. This will bring up all patients with names starting with A.
+3.	Selecting a name from the list will change the profile information on the left to correspond with that user.

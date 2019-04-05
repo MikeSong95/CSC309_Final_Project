@@ -88,7 +88,7 @@
                           <p>Change Password / Account Deletion</p>
                           <div class="account-changes center-text">
                             <div class="container-fluid">
-                              <form>
+                              <form id= "accChgForm" method="GET" action="/deleteAccount">
                                 <div class="form-group">
                                   <label for="newPwd">New password:</label>
                                   <input type="password" class="form-control form-control-sm" id="newPwd" placeholder="Enter new password" name="newPwd">
@@ -96,8 +96,8 @@
                                   <label for="verifyPwd">Verify password:</label>
                                   <input type="password" class="form-control form-control-sm" id="verifyPwd" placeholder="Verify password" name="verifyPwd">
                                 </div>
-                                <button type="submit" class="btn btn-outline-light">Submit</button>
-                                <button type="submit" class="btn btn-outline-light">Delete Account</button>
+                                <button type="button" class="btn btn-outline-light" id="chgPwd">Submit</button>
+                                <button type="submit" class="btn btn-outline-light" id="delAcc">Delete Account</button>
                               </form>
 
                             </div>

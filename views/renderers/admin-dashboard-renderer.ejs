@@ -27,7 +27,8 @@ $(function() {
         e.preventDefault();
         $("#page-wrapper").toggleClass("sidebarDisplayed");
     });
-    console.log("Here");
+
+    $("#chgPwd").click(change_password);
 });
 
 // Function to return information of current user profile
@@ -264,6 +265,22 @@ function cancel_new_medication() {
         );
 }
 
+function change_password() {
+  
+  let formGroupElem = $(".form-group");
+  let newPwd = $("#newPwd").val();
+  let verifyPwd = $("#verifyPwd").val();
+
+  if (newPwd != verifyPwd) {
+    $("#accChgForm").append(
+    '<div class="alert alert-danger alert-dismissible fade in">' +
+    '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>' +
+    '<strong>Password mismatch</strong>' +
+    '</div>'
+    );
+  }
+  // Update the password
+}
 
 /*** Autocomplete ***/
 
