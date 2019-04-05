@@ -1,3 +1,4 @@
+Website URL: https://stormy-retreat-50893.herokuapp.com/
 
 Patient-profile page (Doctor view)
 - Accessed when a doctor user chooses a patient from the doctor dashboard, where
@@ -76,3 +77,10 @@ in with admin credentials via the login page.
 1.	Click the blue icon in the top left of the screen. A search bar will appear.
 2.	The search bar allows admins to search for users. Type “A” in the search bar. This will bring up all patients with names starting with A.
 3.	Selecting a name from the list will change the profile information on the left to correspond with that user.
+
+PLEASE IGNORE: 
+- public/html folder
+- public/js folder 
+- models/appointment.js
+- models/medication.js
+- models/notification.js
