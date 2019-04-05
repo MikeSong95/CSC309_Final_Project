@@ -105,7 +105,6 @@ app.get("/patient-dashboard", (req,res) => {
 	} else {
 		email = req.body.email
 	}
-
 	// check if we have active session cookie
 	if (req.session.user) {
 		res.render('patient-dashboard', {
@@ -164,7 +163,6 @@ app.get("/patient-edit-profile", (req, res) => {
 });
 
 app.post("/edit-patient", (req, res) => {
-	console.log("Editing patient")
 	const data = {
 		password: req.body.password,
 		email: req.body.email, 
@@ -174,13 +172,14 @@ app.post("/edit-patient", (req, res) => {
 		gender:req.body.gender,
 		hcNum: req.body.hcnum
 	}
-	
+
 	// Otherwise, findById
 	Patient.findOne({email:req.session.email}).then((patient) => {
 		if (!patient) {
 			res.status(404).send();
 		} else {
 			if (data.password != "") {
+				console.log("modified password");
 				patient.password = data.password;		
 				// Mark it as modified
 				patient.markModified('password');
@@ -217,11 +216,15 @@ app.post("/edit-patient", (req, res) => {
 			}
 
 			// Save it
-			patient.save().then(() => {
-				res.redirect('/patient-dashboard?email=' + req.session.email)
-			}, (error) => {
-				res.status(400).send(error) // 400 for bad request
-			})
+			patient.save(
+				function(err, result) {
+					if (err) {
+						// An error occurred, stop execution and return 500
+						return res.status(500).send();
+					} else {
+						res.redirect('/patient-dashboard?email=' + req.session.email)
+					}
+				});
 		}
 	}).catch((error) => {
 		res.status(500).send();
